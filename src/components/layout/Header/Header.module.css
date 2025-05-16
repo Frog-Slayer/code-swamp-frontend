@@ -1,0 +1,31 @@
+.header  {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 16px 48px;
+    height: 60px;
+
+    background-color: gray;
+
+    position: sticky;
+    top: 0;
+
+    z-index: 10;
+}
+
+.left, .right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.logo {
+    display: flex;
+}
