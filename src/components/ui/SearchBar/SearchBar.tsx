@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from "react";
+import SearchIcon from "./SearchIcon";
 import styles from "./SearchBar.module.css"
 
 interface SearchBarProps {
@@ -21,18 +22,22 @@ const SearchBar = ({onSearch, placeholder}: SearchBarProps) => {
     };
 
     return (
-        <div>
-        <input
-            type="search"
-            value={query}
-            onChange={(e) => handleChange(e)}
-            onKeyDown={(e) => {
-                if (e.key == 'Enter') {
-                    handleSearch();
-                }
-            }}
-            placeholder={placeholder}
-        ></input>
+        <div className={styles.wrapper}>
+            <div className={styles.icon}>
+                <SearchIcon />
+            </div>
+            <input
+                type="search"
+                className={styles.input}
+                value={query}
+                onChange={(e) => handleChange(e)}
+                onKeyDown={(e) => {
+                    if (e.key == 'Enter') {
+                        handleSearch();
+                    }
+                }}
+                placeholder={placeholder}
+            ></input>
         </div>
     );
 }
