@@ -1,14 +1,13 @@
 import PillButton from "@/components/ui/PillButton/PillButton";
 
+interface LoginButtonProps {
+    onClick: () => void;
+}
 
-const LoginButton = () => {
-    const handleClick = () => {
-        alert("click login")
-    }
-
+const LoginButton = ({onClick}: LoginButtonProps) => {
     return (
         <PillButton 
-            onClick={handleClick}
+            onClick={onClick}
             label="로그인"
         />
     )

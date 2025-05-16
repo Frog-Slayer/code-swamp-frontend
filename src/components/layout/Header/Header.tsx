@@ -5,9 +5,12 @@ import SearchBar from "../../ui/SearchBar/SearchBar";
 import styles from "./Header.module.css"
 import NewPostButton from "./NewPostButton";
 import Notification from "./Notification";
-import LoginButton from "./LoginButton";
+import LoginButton from "@/components/auth/LoginButton";
+import { useState } from "react";
+import LoginModal from "@/components/auth/LoginModal";
 
 const Header = () => {
+    const [isLoginModalOpen, setLoginModalOpen] = useState(false);
     const onSearch = (query: string) => {
         console.log(query);
     };
@@ -35,7 +38,8 @@ const Header = () => {
                     onClick={() => console.log("click avatar")}
                 />
 
-                <LoginButton />
+                <LoginButton onClick={() => setLoginModalOpen(true)}/>
+                <LoginModal isOpen={isLoginModalOpen} handleClose={() => setLoginModalOpen(false)} />
             </div>
       </header>
     );
