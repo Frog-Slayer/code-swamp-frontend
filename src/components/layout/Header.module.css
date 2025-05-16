@@ -1,0 +1,39 @@
+.header  {
+    display: flex;
+}
+
+.logo {
+
+    display: flex;
+
+
+}
+
+.search{
+
+    display: flex;
+
+
+
+}
+
+.newArticleButton{
+
+
+    display: flex;
+
+}
+
+.notification{
+
+
+    display: flex;
+
+}
+
+.avatar {
+
+
+    display: flex;
+
+}
