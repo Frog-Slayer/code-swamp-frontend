@@ -1,6 +1,6 @@
 'use client'
 
-import FeedCard from "@/components/ui/FeedCard";
+import FeedCard from "@/components/ui/FeedCard/FeedCard";
 
 export default function Home() {
 

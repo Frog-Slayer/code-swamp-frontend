@@ -1,15 +1,18 @@
+'use client'
+
+import SearchBar from "../ui/SearchBar/SearchBar";
 import headerStyles from "./Header.module.css"
 
 const Header = () => {
+    const onSearch = (query: string) => {
+        console.log(query);
+    };
+
     return (
         <header className={headerStyles.header}>
             <div className={headerStyles.logo}>MyLogo</div>
             
-            <input
-                type="search"
-                className={headerStyles.search}
-                placeholder="검색어를 입력하세요"
-            />
+            <SearchBar onSearch={onSearch} placeholder="검색"/>
             
             <button className={headerStyles.newArticleButton}>새 글 추가</button>
             
