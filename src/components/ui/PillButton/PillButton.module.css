@@ -5,6 +5,7 @@
     padding: 8px 12px;
     color: black;;
     width: 50%;
+    min-width: 90px;
     max-height: 48px;
 }
 

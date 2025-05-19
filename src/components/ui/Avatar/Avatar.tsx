@@ -1,5 +1,4 @@
 import Image from "next/image";
-import styles from "./Avatar.module.css"
 
 interface AvatarProps {
     src: string;
@@ -11,16 +10,15 @@ interface AvatarProps {
 const Avatar = ({src, alt, size, onClick }: AvatarProps) => {
 
     return (
-        <div className={styles.wrapper}>
-            <Image
-                src = {src}
-                alt = {alt}
-                width = {size}
-                height = {size}
-                onClick = {onClick}
-                unoptimized
-            />
-        </div>
+        <Image
+            src = {src}
+            alt = {alt}
+            width = {size}
+            height = {size}
+            onClick = {onClick}
+            style={{borderRadius: '50%', cursor: 'pointer'}}
+            unoptimized
+        />
     )
 }
 
