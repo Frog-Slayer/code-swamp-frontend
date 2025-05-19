@@ -8,7 +8,6 @@ interface AvatarProps {
     onClick?: () => void;
 }
 
-
 const Avatar = ({src, alt, size, onClick }: AvatarProps) => {
 
     return (

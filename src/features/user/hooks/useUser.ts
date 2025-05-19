@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { RootState } from '@/features/user/store'
-import { setUser, clearUser } from '@/features/user/store/slice/userSlice'
+import { RootState } from '@/app/store'
+import { setUser, clearUser } from '@/features/user/store/userSlice'
 import { User } from '@/features/user/types/user'
 
 export const useUser = () => {

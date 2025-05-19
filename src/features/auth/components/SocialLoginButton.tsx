@@ -2,9 +2,9 @@ import { IconType } from "react-icons";
 import styles from "./SocialLoginButton.module.css"
 
 interface SocialLoginButtonProps{
-    Icon?: IconType;
-    label: string;
-    provider: 'google' | 'github';
+    Icon?: IconType
+    label: string
+    provider: 'google' | 'github'
 }
 
 const SocialLoginButton = ({Icon, label, provider}: SocialLoginButtonProps) => {
