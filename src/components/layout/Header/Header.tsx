@@ -1,19 +1,31 @@
 'use client'
 
-import Avatar from "@/components/ui/Avatar/Avatar";
-import SearchBar from "../../ui/SearchBar/SearchBar";
+import Avatar from "@/components/ui/Avatar/Avatar"
+import SearchBar from "../../ui/SearchBar/SearchBar"
 import styles from "./Header.module.css"
-import NewPostButton from "./NewPostButton";
-import Notification from "./Notification";
-import LoginButton from "@/components/auth/LoginButton";
-import { useState } from "react";
-import LoginModal from "@/components/auth/LoginModal";
+import NewPostButton from "./NewPostButton"
+import Notification from "./Notification"
+import { useState } from "react"
+import LoginButton from "@/features/auth/components/LoginButton"
+import LoginModal from "@/features/auth/components/LoginModal"
+import { LoginSuccessPayload, NewUserPayload } from "@/features/auth/types/authEvents"
 
 const Header = () => {
-    const [isLoginModalOpen, setLoginModalOpen] = useState(false);
+    const [isLoginModalOpen, setLoginModalOpen] = useState(false)
     const onSearch = (query: string) => {
-        console.log(query);
-    };
+        console.log(query)
+    }
+
+    const onLoginSuccess = (tokens: LoginSuccessPayload) => {
+
+
+    }
+
+    const onNewUser = (userInfo: NewUserPayload) => {
+
+
+    }
+
 
     return (
         <header className={styles.header}>
@@ -39,7 +51,7 @@ const Header = () => {
                 />
 
                 <LoginButton onClick={() => setLoginModalOpen(true)}/>
-                <LoginModal isOpen={isLoginModalOpen} handleClose={() => setLoginModalOpen(false)} />
+                <LoginModal isOpen={isLoginModalOpen} onClose={() => setLoginModalOpen(false)} onLoginSuccess={onLoginSuccess} onNewUser={onNewUser}/>
             </div>
       </header>
     );

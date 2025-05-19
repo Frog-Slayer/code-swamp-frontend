@@ -1,7 +1,7 @@
 import PillButton from "@/components/ui/PillButton/PillButton";
 
 interface LoginButtonProps {
-    onClick: () => void;
+    onClick: () => void
 }
 
 const LoginButton = ({onClick}: LoginButtonProps) => {
