@@ -26,6 +26,7 @@ const Header = () => {
 
     const onLoginSuccess = (payload: LoginSuccessPayload) => {
         login(payload.accessToken)
+
         const userInfo : User = {
             email: payload.email,
             name: payload.name,
@@ -33,6 +34,7 @@ const Header = () => {
         }
 
         setUser( userInfo )
+        setLoginModalOpen(false)
     }
 
     const onNewUser = (payload: NewUserPayload) => {
@@ -55,7 +57,6 @@ const Header = () => {
             <div className={styles.right}>
                 <NewPostButton />
                 <Notification />
-                
                 <Avatar
                     src = "https://velog.velcdn.com/images/frog_slayer/profile/6610c9f9-84a8-4da2-a1b6-7fbd4bc40818/image.png"
                     alt = "avatar"

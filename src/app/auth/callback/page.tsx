@@ -13,7 +13,6 @@ export default function AuthCallback() {
     const name = searchParams.get('rame') ?? ''
     const profileImage = searchParams.get('profileImage') ?? ''
     const accessToken = searchParams.get('accessToken') ?? ''
-    const refreshToken = searchParams.get('refreshToken') ?? ''
 
     const newUser = searchParams.get('newUser') === 'true'
 
@@ -33,7 +32,7 @@ export default function AuthCallback() {
             window.opener.postMessage(newUserEvent, window.origin)
         }
         else {
-              const loginSuccessPayload : LoginSuccessPayload = {
+            const loginSuccessPayload : LoginSuccessPayload = {
                 accessToken,
                 email,
                 name,

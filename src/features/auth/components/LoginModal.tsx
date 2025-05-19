@@ -6,8 +6,8 @@ import { AUTH_EVENT_TYPES, AuthEvent, LoginSuccessPayload, NewUserPayload } from
 interface LoginModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onLoginSuccess: (tokens: LoginSuccessPayload) => void;
-    onNewUser: (userInfo: NewUserPayload) => void;
+    onLoginSuccess: (payload: LoginSuccessPayload) => void;
+    onNewUser: (payload: NewUserPayload) => void;
 }
 
 const LoginModal = ({isOpen, onClose, onLoginSuccess, onNewUser}: LoginModalProps) => {
@@ -19,11 +19,11 @@ const LoginModal = ({isOpen, onClose, onLoginSuccess, onNewUser}: LoginModalProp
 
             switch (data.type) {
                 case AUTH_EVENT_TYPES.LOGIN_SUCCESS:
-                    onLoginSuccess(data.tokens)
+                    onLoginSuccess(data.payload)
                     break
 
                 case AUTH_EVENT_TYPES.NEW_USER:
-                    onNewUser(data.userInfo)
+                    onNewUser(data.payload)
                     break
             }
             onClose()
