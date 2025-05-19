@@ -5,7 +5,9 @@ export const AUTH_EVENT_TYPES = {
 
 export interface LoginSuccessPayload {
     accessToken: string
-    refreshToken: string
+    email: string
+    name: string
+    profileImage: string
 }
 
 export interface NewUserPayload {
@@ -16,12 +18,12 @@ export interface NewUserPayload {
 
 export interface LoginSuccessEvent {
     type: typeof AUTH_EVENT_TYPES.LOGIN_SUCCESS
-    tokens: LoginSuccessPayload
+    payload: LoginSuccessPayload
 }
 
 export interface NewUserEvent {
     type: typeof AUTH_EVENT_TYPES.NEW_USER
-    userInfo: NewUserPayload
+    payload: NewUserPayload
 }
 
 export type AuthEvent = LoginSuccessEvent | NewUserEvent

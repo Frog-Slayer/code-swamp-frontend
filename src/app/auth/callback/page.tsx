@@ -9,14 +9,16 @@ export default function AuthCallback() {
   const searchParams = useSearchParams()
 
   useEffect(() => {
+    const email = searchParams.get('email') ?? ''
+    const name = searchParams.get('rame') ?? ''
+    const profileImage = searchParams.get('profileImage') ?? ''
+    const accessToken = searchParams.get('accessToken') ?? ''
+    const refreshToken = searchParams.get('refreshToken') ?? ''
+
     const newUser = searchParams.get('newUser') === 'true'
 
     if (window.opener) {
         if (newUser) {
-            const email = searchParams.get('email') ?? ''
-            const name = searchParams.get('rame') ?? ''
-            const profileImage = searchParams.get('profileImage') ?? ''
-
             const newUserPayload : NewUserPayload = {
                 email,
                 name,
@@ -25,23 +27,22 @@ export default function AuthCallback() {
 
             const newUserEvent: NewUserEvent ={
                 type: AUTH_EVENT_TYPES.NEW_USER,
-                userInfo: newUserPayload
+                payload: newUserPayload
             }
 
             window.opener.postMessage(newUserEvent, window.origin)
         }
         else {
-            const accessToken = searchParams.get('accessToken') ?? ''
-            const refreshToken = searchParams.get('refreshToken') ?? ''
-
-            const loginSuccessPayload : LoginSuccessPayload = {
+              const loginSuccessPayload : LoginSuccessPayload = {
                 accessToken,
-                refreshToken
+                email,
+                name,
+                profileImage
             }
 
             const loginSuccessEvent : LoginSuccessEvent = {
                 type: AUTH_EVENT_TYPES.LOGIN_SUCCESS,
-                tokens: loginSuccessPayload
+                payload: loginSuccessPayload
             }
 
             window.opener.postMessage(loginSuccessEvent, window.origin); 

@@ -5,25 +5,38 @@ import SearchBar from "../../ui/SearchBar/SearchBar"
 import styles from "./Header.module.css"
 import NewPostButton from "./NewPostButton"
 import Notification from "./Notification"
-import { useState } from "react"
 import LoginButton from "@/features/auth/components/LoginButton"
 import LoginModal from "@/features/auth/components/LoginModal"
 import { LoginSuccessPayload, NewUserPayload } from "@/features/auth/types/authEvents"
 
+import { useState } from "react"
+import { useAuth } from "@/features/auth/hooks/useAuth"
+import { useUser } from "@/features/user/hooks/useUser"
+import { User } from "@/features/user/types/user"
+
 const Header = () => {
     const [isLoginModalOpen, setLoginModalOpen] = useState(false)
+
+    const { login } = useAuth()
+    const { setUser } = useUser()
+
     const onSearch = (query: string) => {
         console.log(query)
     }
 
-    const onLoginSuccess = (tokens: LoginSuccessPayload) => {
+    const onLoginSuccess = (payload: LoginSuccessPayload) => {
+        login(payload.accessToken)
+        const userInfo : User = {
+            email: payload.email,
+            name: payload.name,
+            profileImage: payload.profileImage
+        }
 
-
+        setUser( userInfo )
     }
 
-    const onNewUser = (userInfo: NewUserPayload) => {
-
-
+    const onNewUser = (payload: NewUserPayload) => {
+        console.log("new user")
     }
 
 
