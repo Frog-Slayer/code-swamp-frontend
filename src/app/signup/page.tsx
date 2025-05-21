@@ -9,9 +9,9 @@ export default function SignUp() {
   const { user, setUser } = useUser()
 
   const [email, setEmail] = useState('')
+  const [profileImage, setProfileImage] = useState('')
   const [username, setUsername] = useState('')
   const [nickname, setNickname] = useState('')
-  const [profileImage, setProfileImage] = useState('')
 
   useEffect(() => {
     if (user) {
@@ -47,8 +47,7 @@ export default function SignUp() {
     <div> 
       <form onSubmit={handleSubmit}>
         <input type="email" placeholder="이메일" value={email} onChange={(e) => setEmail(e.target.value)} readOnly />
-        <input type="email" placeholder="사용자 id" value = {username} onChange={(e) => setUsername(e.target.value)} />
-
+        <input type="text" placeholder="사용자 id" value = {username} onChange={(e) => setUsername(e.target.value)} />
         <input type="text" placeholder="닉네임" value={nickname} onChange={(e) => setNickname(e.target.value)} />
 
         <button type="submit">
