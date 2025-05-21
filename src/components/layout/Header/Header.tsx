@@ -43,6 +43,14 @@ const Header = () => {
 
     const onNewUser = (payload: NewUserPayload) => {
         saveSignupToken(payload.signupToken)
+
+        const userInfo : User = {
+            email: payload.email,
+            name: payload.name,
+            profileImage: payload.profileImage
+        }
+
+        setUser ( userInfo )
         setLoginModalOpen(false)
         router.push('/signup')
     }
