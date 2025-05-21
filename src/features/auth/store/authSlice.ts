@@ -20,7 +20,6 @@ export const authSlice = createSlice({
           state.accessToken = action.payload
           state.isAuthenticated = true
         },
-
         setSignupToken(state, action: PayloadAction<string>) {
           state.signupToken = action.payload
         },
