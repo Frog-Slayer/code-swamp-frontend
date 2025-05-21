@@ -11,6 +11,7 @@ export interface LoginSuccessPayload {
 }
 
 export interface NewUserPayload {
+    signupToken: string
     email: string
     name: string
     profileImage: string

@@ -14,11 +14,13 @@ export default function AuthCallback() {
     const profileImage = searchParams.get('profileImage') ?? ''
     const accessToken = searchParams.get('accessToken') ?? ''
 
-    const newUser = searchParams.get('newUser') === 'true'
+    const newUser = searchParams.get('isNewUser') === 'true'
 
     if (window.opener) {
         if (newUser) {
+            const signupToken = searchParams.get('signupToken') ?? ''
             const newUserPayload : NewUserPayload = {
+                signupToken,
                 email,
                 name,
                 profileImage

@@ -13,11 +13,13 @@ import { useState } from "react"
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import { useUser } from "@/features/user/hooks/useUser"
 import { User } from "@/features/user/types/user"
+import { useRouter } from "next/navigation"
 
 const Header = () => {
     const [isLoginModalOpen, setLoginModalOpen] = useState(false)
 
-    const { login } = useAuth()
+    const router = useRouter()
+    const { login, saveSignupToken } = useAuth()
     const { user, setUser } = useUser()
 
     const isLoggedIn = Boolean(user)
@@ -40,7 +42,9 @@ const Header = () => {
     }
 
     const onNewUser = (payload: NewUserPayload) => {
-        console.log("new user")
+        saveSignupToken(payload.signupToken)
+        setLoginModalOpen(false)
+        router.push('/signup')
     }
 
 

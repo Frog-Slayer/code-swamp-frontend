@@ -1,6 +1,6 @@
 'use client'
 
-export default function SignupLayout({
+export default function AuthCallbackLayout({
     children,
   }: Readonly<{
     children: React.ReactNode;
