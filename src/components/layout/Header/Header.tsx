@@ -37,6 +37,8 @@ const Header = () => {
             profileImage: payload.profileImage
         }
 
+        console.log(userInfo)
+
         setUser( userInfo )
         setLoginModalOpen(false)
     }

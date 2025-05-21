@@ -10,7 +10,7 @@ export default function AuthCallback() {
 
   useEffect(() => {
     const email = searchParams.get('email') ?? ''
-    const name = searchParams.get('rame') ?? ''
+    const name = searchParams.get('name') ?? ''
     const profileImage = searchParams.get('profileImage') ?? ''
     const accessToken = searchParams.get('accessToken') ?? ''
 
