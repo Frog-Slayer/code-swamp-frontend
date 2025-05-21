@@ -4,8 +4,9 @@ const BASE_URL = 'http://localhost:8080'
 
 type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE'
 
-interface FetchOptions extends RequestInit {
-    method?: HttpMethod
+interface FetchOptions extends Omit<RequestInit, 'body'> {
+    method?: HttpMethod,
+    body?: BodyInit | Record<string, unknown>
 }
 
 export const  defaultFetch = async <T = any>(

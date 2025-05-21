@@ -2,6 +2,7 @@
 
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import { useUser } from "@/features/user/hooks/useUser"
+import { defaultFetch } from "@/lib/customFetch"
 import { useEffect, useState } from "react"
 
 export default function SignUp() {
@@ -24,19 +25,17 @@ export default function SignUp() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    const res = await fetch('http://localhost:8080/users/signup', {
+    const res = await defaultFetch('/users/signup', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
+      body: {
         token: signupToken,
         email: email,
         username: "username",
         nickname: nickname,
         profileImageUrl: profileImage
-      })
+      },
     })
+
 
     if (res.ok) {
       console.log("login success")
