@@ -2,57 +2,41 @@
 
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import { useUser } from "@/features/user/hooks/useUser"
-import { defaultFetch } from "@/lib/customFetch"
+import { signUp } from "@/lib/api/user/signup"
 import { useEffect, useState } from "react"
+import SignUpForm from "./SignupForm"
+import { SignupRequest } from "@/lib/api/user/type"
 
 export default function SignUp() {
   const { signupToken } = useAuth()
-  const { user, setUser } = useUser()
+  const { user } = useUser()
 
-  const [email, setEmail] = useState('')
-  const [profileImage, setProfileImage] = useState('')
-  const [username, setUsername] = useState('')
-  const [nickname, setNickname] = useState('')
+  const onSubmit = async (data: SignupRequest) => {
+    try {
+      if (!signupToken) throw new Error('Signup token is required')
 
-  useEffect(() => {
-    if (user) {
-      setEmail(user.email ?? '')
-      setNickname(user.name ?? '')
-      setProfileImage(user.profileImage ?? '')
-    }
-  }, [user])
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    const res = await defaultFetch('/users/signup', {
-      method: 'POST',
-      body: {
-        token: signupToken,
-        email: email,
-        username: "username",
-        nickname: nickname,
-        profileImageUrl: profileImage
-      },
-    })
-
-
-    if (res.ok) {
-      console.log("login success")
+      await signUp({
+        token: data.token,
+        email: data.email,
+        username: data.username,
+        nickname: data.nickname,
+        profileImageUrl: data.profileImageUrl
+      })
+    } catch (error) {
+      console.log(error)
     }
   }
 
   return (
     <div> 
-      <form onSubmit={handleSubmit}>
-        <input type="email" placeholder="이메일" value={email} onChange={(e) => setEmail(e.target.value)} readOnly />
-        <input type="text" placeholder="사용자 id" value = {username} onChange={(e) => setUsername(e.target.value)} />
-        <input type="text" placeholder="닉네임" value={nickname} onChange={(e) => setNickname(e.target.value)} />
-
-        <button type="submit">
-          가입 ㄱ
-        </button>
-      </form>
+      { signupToken && user ? (
+      <SignUpForm
+        defaultValues={{ token: signupToken, email: user.email, nickname: user.name, profileImageUrl: user.profileImage}}
+        onSubmit={ onSubmit }
+      />) : (
+        <p> 로그인이 필요합니다 </p>
+        )
+      }
     </div>
   )
 }

@@ -6,7 +6,7 @@ type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE'
 
 interface FetchOptions extends Omit<RequestInit, 'body'> {
     method?: HttpMethod,
-    body?: BodyInit | Record<string, unknown>
+    body?: BodyInit | object
 }
 
 export const  defaultFetch = async <T = any>(
