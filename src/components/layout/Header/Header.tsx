@@ -24,6 +24,10 @@ const Header = () => {
 
     const isLoggedIn = Boolean(user)
 
+    const onLogoClick = () => {
+        router.push('/')
+    }
+
     const onSearch = (query: string) => {
         console.log(query)
     }
@@ -61,7 +65,7 @@ const Header = () => {
     return (
         <header className={styles.header}>
             <div className={styles.left}>
-                <div className={styles.logo}>MyLogo</div>
+                <div className={styles.logo} onClick={onLogoClick}>MyLogo</div>
             </div>
             
 
