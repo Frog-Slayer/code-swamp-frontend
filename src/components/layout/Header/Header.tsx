@@ -14,13 +14,16 @@ import { useAuth } from "@/features/auth/hooks/useAuth"
 import { useUser } from "@/features/user/hooks/useUser"
 import { User } from "@/features/user/types/user"
 import { useRouter } from "next/navigation"
+import { useRefreshAccessToken } from "@/lib/api/auth/refresh"
+import { usePrivateFetch } from "@/lib/customFetch"
 
 const Header = () => {
     const [isLoginModalOpen, setLoginModalOpen] = useState(false)
 
     const router = useRouter()
-    const { login, saveSignupToken } = useAuth()
+    const { accessToken, login, saveSignupToken } = useAuth()
     const { user, setUser } = useUser()
+    const privateFetch = usePrivateFetch()
 
     const isLoggedIn = Boolean(user)
 
@@ -29,7 +32,9 @@ const Header = () => {
     }
 
     const onSearch = (query: string) => {
-        console.log(query)
+        const test = async () => await privateFetch<string>("/auth/test", {})
+        const res = test()
+        console.log(res)
     }
 
     const onLoginSuccess = (payload: LoginSuccessPayload) => {

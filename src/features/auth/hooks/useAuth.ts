@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '@/app/store/store'
 import { setAccessToken, setSignupToken, logout } from '@/features/auth/store/authSlice'
+import { useCallback } from 'react'
 
 export const useAuth = () => {
   const { accessToken, signupToken, isAuthenticated } = useSelector((state: RootState) => state.auth)

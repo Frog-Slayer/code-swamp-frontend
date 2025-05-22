@@ -1,4 +1,5 @@
-import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useRefreshAccessToken } from "./api/auth/refresh";
+import { store } from "@/app/store/store";
 
 const BASE_URL = 'http://localhost:8080'
 
@@ -11,7 +12,7 @@ interface FetchOptions extends Omit<RequestInit, 'body'> {
 
 export const  defaultFetch = async <T = any>(
     uri: string, options: FetchOptions
-) : Promise<T>  => {
+) : Promise<T | undefined>  => {
     const url = `${BASE_URL}${uri}`
     const { method = "GET", headers, body, ...rest } = options
 
@@ -21,7 +22,7 @@ export const  defaultFetch = async <T = any>(
 
     if (body) {
         if (body instanceof FormData) {
-            fetchBody = body;
+            fetchBody = body
         }
         else {
             fetchHeaders.set('Content-Type', 'application/json' )
@@ -37,23 +38,97 @@ export const  defaultFetch = async <T = any>(
     }
 
     const response = await fetch(url, fetchOptions) 
+    
+    if (!response.ok) {
+        let errorMessage
 
-    //TODO: Error Handling
+        try {
+            const errorData = await response.json()
+            if (errorData?.message) {
+                errorMessage = errorData.message
+            }
+        } catch (err) {
+            errorMessage = `Error: ${response.status}`
+        }
 
-    return response.json()
+        throw new Error(errorMessage)
+    }
+
+    const contentLength = response.headers.get("Content-Length")
+    const contentType = response.headers.get("Content-Type")
+
+    if (
+        response.status === 204 ||
+        contentLength === "0" ||
+        !contentType?.includes("application/json")
+    ) {
+        return undefined
+    }
+
+    try {
+        return await response.json()
+    } catch (e) {
+        throw new Error("응답을 JSON으로 파싱하는 데 실패했습니다.")
+    }
 }
 
+let refreshPromise: Promise<string | null> | null = null
+
 export const usePrivateFetch = () => {
-    const { accessToken } = useAuth();
+    const refreshAccessToken = useRefreshAccessToken()
 
-    const privateFetch = async <T>(uri: string, options: FetchOptions) : Promise<T>  => {
-        const authHeaders = new Headers(options.headers)
 
-        if (!accessToken) throw new Error("No access token available")
+    const attemptRefresh = async (): Promise<string | null> => {
+        if (!refreshPromise) {
+            refreshPromise = (async () => {
+              try {
+                  const res = await refreshAccessToken()
+                  return res.accessToken
+              } catch (err) {
+                  return null
+              }
+              finally {
+                  refreshPromise = null
+              }
+        })()
+    }
+        return refreshPromise
+    }
 
-        authHeaders.set('Authorization', `Bearer ${accessToken}`)
+    const getAccessToken = () => {
+        return store.getState().auth.accessToken
+    }
 
-        return defaultFetch<T>(uri, {...options, headers: authHeaders, credentials: 'include'})
+    const privateFetch = async <T>(
+        uri: string, options: FetchOptions
+    ) : Promise<T | undefined>  => {
+        const accessToken = getAccessToken()
+        try {
+            if (!accessToken) throw new Error("No access token available")
+
+            const authHeaders = new Headers(options.headers)
+            authHeaders.set('Authorization', `Bearer ${accessToken}`)
+
+            return await defaultFetch<T>(uri, {...options, headers: authHeaders, credentials: 'include'})
+        }
+        catch (err) {
+            if (!accessToken || (err instanceof Response && err.status === 401)) {
+                const newAccessToken = await attemptRefresh()
+                if (!newAccessToken) throw new Error("Cannot refresh token")
+                
+                const retryHeaders = new Headers(options.headers)
+                retryHeaders.set("Authorization", `Bearer ${newAccessToken}`)
+
+                return await defaultFetch<T>(uri, {
+                    ...options,
+                    headers: retryHeaders,
+                    credentials: "include"
+                })
+            }
+
+            throw err
+        }
+
     }
 
     return privateFetch
