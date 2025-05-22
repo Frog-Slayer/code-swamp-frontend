@@ -21,7 +21,7 @@ const Header = () => {
     const [isLoginModalOpen, setLoginModalOpen] = useState(false)
 
     const router = useRouter()
-    const { accessToken, login, saveSignupToken } = useAuth()
+    const { accessToken, setAccessToken, setSignupToken } = useAuth()
     const { user, setUser } = useUser()
     const privateFetch = usePrivateFetch()
 
@@ -31,14 +31,13 @@ const Header = () => {
         router.push('/')
     }
 
-    const onSearch = (query: string) => {
-        const test = async () => await privateFetch<string>("/auth/test", {})
-        const res = test()
+    const onSearch = async (query: string) => {
+        const res = await privateFetch<string>("/auth/test", {})
         console.log(res)
     }
 
     const onLoginSuccess = (payload: LoginSuccessPayload) => {
-        login(payload.accessToken)
+        setAccessToken(payload.accessToken)
 
         const userInfo : User = {
             email: payload.email,
@@ -53,7 +52,7 @@ const Header = () => {
     }
 
     const onNewUser = (payload: NewUserPayload) => {
-        saveSignupToken(payload.signupToken)
+        setSignupToken(payload.signupToken)
 
         const userInfo : User = {
             email: payload.email,

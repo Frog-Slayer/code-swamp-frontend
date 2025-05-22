@@ -54,6 +54,7 @@ export const  defaultFetch = async <T = any>(
         throw new Error(errorMessage)
     }
 
+
     const contentLength = response.headers.get("Content-Length")
     const contentType = response.headers.get("Content-Type")
 
@@ -62,8 +63,11 @@ export const  defaultFetch = async <T = any>(
         contentLength === "0" ||
         !contentType?.includes("application/json")
     ) {
+
+        console.log(response.text())
         return undefined
     }
+
 
     try {
         return await response.json()

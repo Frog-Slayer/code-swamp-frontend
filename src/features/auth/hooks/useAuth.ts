@@ -1,30 +1,35 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '@/app/store/store'
-import { setAccessToken, setSignupToken, logout } from '@/features/auth/store/authSlice'
-import { useCallback } from 'react'
+import { setAccessTokenAction, setSignupTokenAction, logoutAction, setAuthLoadingAction } from '@/features/auth/store/authSlice'
 
 export const useAuth = () => {
-  const { accessToken, signupToken, isAuthenticated } = useSelector((state: RootState) => state.auth)
+  const { accessToken, signupToken, isAuthenticated, isAuthLoading } = useSelector((state: RootState) => state.auth)
   const dispatch = useDispatch()
 
-  const login = (accessToken: string) => {
-    dispatch(setAccessToken(accessToken));
+  const setAccessToken = (accessToken: string) => {
+    dispatch(setAccessTokenAction(accessToken));
   }
 
-  const saveSignupToken = (signupToken: string) => {
-    dispatch(setSignupToken(signupToken));
+  const setSignupToken = (signupToken: string) => {
+    dispatch(setSignupTokenAction(signupToken));
   }
 
-  const signout = () => {
-    dispatch(logout())
+  const logout = () => {
+    dispatch(logoutAction())
+  }
+
+  const setAuthLoading = (isLoading : boolean) => {
+    dispatch(setAuthLoadingAction(isLoading))
   }
 
   return {
     accessToken,
     signupToken,
     isAuthenticated,
-    login,
-    saveSignupToken,
-    signout
+    isAuthLoading,
+    setAccessToken,
+    setAuthLoading,
+    setSignupToken,
+    logout,
   }
 }

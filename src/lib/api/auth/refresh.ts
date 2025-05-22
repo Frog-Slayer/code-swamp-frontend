@@ -1,4 +1,5 @@
 import { useAuth } from "@/features/auth/hooks/useAuth"
+import { useUser } from "@/features/user/hooks/useUser"
 import { defaultFetch } from "@/lib/customFetch"
 
 interface RefreshResult {
@@ -10,24 +11,33 @@ interface RefreshResult {
 }
 
 export const useRefreshAccessToken = () => {
-    const { login, signout } = useAuth()
+    const { setAccessToken, logout } = useAuth()
+    const { setUser } = useUser()
 
     const refreshAccessToken = async () : Promise<RefreshResult> => {
-        const res = await defaultFetch<RefreshResult> (
-            "/auth/refresh",
-            {
-                method: "GET",
-                credentials: "include"
-            })
+        try {
+            const res = await defaultFetch<RefreshResult> (
+                "/auth/refresh",
+                {
+                    method: "GET",
+                    credentials: "include"
+                })
 
-        if (!res || !res.accessToken) {
-            signout()
+            if (!res || !res.accessToken) {
+                throw new Error("cannot refresh token")
+            }
+
+            setAccessToken(res.accessToken)
+            setUser({
+                name: res.userProfile.nickname,
+                profileImage: res.userProfile.profileImage
+            })
+            return res
+        }
+        catch (err) {
+            logout()
             throw new Error("cannot refresh token")
         }
-
-        login(res.accessToken)
-
-        return res
     }
 
     return refreshAccessToken
