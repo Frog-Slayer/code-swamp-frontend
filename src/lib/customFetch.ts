@@ -1,5 +1,5 @@
-import { useRefreshAccessToken } from "./api/auth/refresh";
 import { store } from "@/app/store/store";
+import { refreshAccessToken } from "./api/auth/refresh";
 
 const BASE_URL = 'http://localhost:8080'
 
@@ -78,61 +78,55 @@ export const  defaultFetch = async <T = any>(
 
 let refreshPromise: Promise<string | null> | null = null
 
-export const usePrivateFetch = () => {
-    const refreshAccessToken = useRefreshAccessToken()
-
-    const attemptRefresh = async (): Promise<string | null> => {
-        if (!refreshPromise) {
-            refreshPromise = (async () => {
-              try {
-                  const res = await refreshAccessToken()
-                  return res.accessToken
-              } catch (err) {
-                  return null
-              }
-              finally {
-                  refreshPromise = null
-              }
-        })()
-    }
-        return refreshPromise
-    }
-
-    const getAccessToken = () => {
-        return store.getState().auth.accessToken
-    }
-
-    const privateFetch = async <T>(
-        uri: string, options: FetchOptions
-    ) : Promise<T | undefined>  => {
-        const accessToken = getAccessToken()
-        try {
-            if (!accessToken) throw new Error("No access token available")
-
-            const authHeaders = new Headers(options.headers)
-            authHeaders.set('Authorization', `Bearer ${accessToken}`)
-
-            return await defaultFetch<T>(uri, {...options, headers: authHeaders, credentials: 'include'})
-        }
-        catch (err) {
-            if (!accessToken || (err instanceof Response && err.status === 401)) {
-                const newAccessToken = await attemptRefresh()
-                if (!newAccessToken) throw new Error("Cannot refresh token")
-                
-                const retryHeaders = new Headers(options.headers)
-                retryHeaders.set("Authorization", `Bearer ${newAccessToken}`)
-
-                return await defaultFetch<T>(uri, {
-                    ...options,
-                    headers: retryHeaders,
-                    credentials: "include"
-                })
+const attemptRefresh = async (): Promise<string | null> => {
+    if (!refreshPromise) {
+        refreshPromise = (async () => {
+            try {
+                const res = await refreshAccessToken()
+                return res.accessToken
+            } catch (err) {
+                return null
             }
+            finally {
+                refreshPromise = null
+            }
+    })()
+}
+    return refreshPromise
+}
 
-            throw err
+const getAccessToken = () => {
+    return store.getState().auth.accessToken
+}
+
+export const privateFetch = async <T>(
+    uri: string, options: FetchOptions
+) : Promise<T | undefined>  => {
+    const accessToken = getAccessToken()
+    try {
+        if (!accessToken) throw new Error("No access token available")
+
+        const authHeaders = new Headers(options.headers)
+        authHeaders.set('Authorization', `Bearer ${accessToken}`)
+
+        return await defaultFetch<T>(uri, {...options, headers: authHeaders, credentials: 'include'})
+    }
+    catch (err) {
+        if (!accessToken || (err instanceof Response && err.status === 401)) {
+            const newAccessToken = await attemptRefresh()
+            if (!newAccessToken) throw new Error("Cannot refresh token")
+            
+            const retryHeaders = new Headers(options.headers)
+            retryHeaders.set("Authorization", `Bearer ${newAccessToken}`)
+
+            return await defaultFetch<T>(uri, {
+                ...options,
+                headers: retryHeaders,
+                credentials: "include"
+            })
         }
 
+        throw err
     }
 
-    return privateFetch
 }

@@ -14,7 +14,7 @@ import { useAuth } from "@/features/auth/hooks/useAuth"
 import { useUser } from "@/features/user/hooks/useUser"
 import { User } from "@/features/user/types/user"
 import { useRouter } from "next/navigation"
-import { useLogout } from "@/lib/api/auth/logout"
+import { logout } from "@/lib/api/auth/logout"
 
 const Header = () => {
     const [isLoginModalOpen, setLoginModalOpen] = useState(false)
@@ -24,7 +24,6 @@ const Header = () => {
     const { user, setUser } = useUser()
 
     const isLoggedIn = Boolean(user)
-    const logout = useLogout()
 
     const onLogoClick = () => {
         router.push('/')

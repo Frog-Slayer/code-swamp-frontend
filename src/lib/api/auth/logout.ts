@@ -1,34 +1,27 @@
-import { useAuth } from "@/features/auth/hooks/useAuth"
-import { useUser } from "@/features/user/hooks/useUser"
-import { usePrivateFetch } from "@/lib/customFetch"
+import { store } from "@/app/store/store"
+import { clear } from "@/features/auth/store/authSlice"
+import { clearUser } from "@/features/user/store/userSlice"
+import { privateFetch } from "@/lib/customFetch"
 
 interface LogoutResponse {
     message: string
 }
 
-export const useLogout = () => {
-    const privateFetch = usePrivateFetch()
-    const { clearAuthData } = useAuth()
-    const { clearUser } = useUser()
+export const logout = async () : Promise<LogoutResponse> => {
+        try {
+        const res = await privateFetch<LogoutResponse>('/logout', {
+            method: 'POST',
+        })
 
-    const logout = async () : Promise<LogoutResponse> => {
-            try {
-            const res = await privateFetch<LogoutResponse>('/logout', {
-                method: 'POST',
-            })
-
-            if (!res) {
-                throw new Error("Logout failed")
-            }
-
-            clearUser()
-            clearAuthData()
-            return res
-        }
-        catch (err) {
+        if (!res) {
             throw new Error("Logout failed")
         }
-    }
 
-    return logout
+        store.dispatch(clear())
+        store.dispatch(clearUser())
+        return res
+    }
+    catch (err) {
+        throw new Error("Logout failed")
+    }
 }

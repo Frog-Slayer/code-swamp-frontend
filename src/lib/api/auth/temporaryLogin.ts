@@ -1,6 +1,4 @@
-import { usePrivateFetch } from "@/lib/customFetch"
-
-const privateFetch = usePrivateFetch()
+import { privateFetch } from "@/lib/customFetch"
 
 interface TempLoginRequest {
     email: string,
