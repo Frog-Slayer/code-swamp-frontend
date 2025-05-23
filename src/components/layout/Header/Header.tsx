@@ -14,25 +14,24 @@ import { useAuth } from "@/features/auth/hooks/useAuth"
 import { useUser } from "@/features/user/hooks/useUser"
 import { User } from "@/features/user/types/user"
 import { useRouter } from "next/navigation"
-import { useRefreshAccessToken } from "@/lib/api/auth/refresh"
-import { usePrivateFetch } from "@/lib/customFetch"
+import { useLogout } from "@/lib/api/auth/logout"
 
 const Header = () => {
     const [isLoginModalOpen, setLoginModalOpen] = useState(false)
 
     const router = useRouter()
-    const { accessToken, setAccessToken, setSignupToken } = useAuth()
+    const { setAccessToken, setSignupToken } = useAuth()
     const { user, setUser } = useUser()
-    const privateFetch = usePrivateFetch()
 
     const isLoggedIn = Boolean(user)
+    const logout = useLogout()
 
     const onLogoClick = () => {
         router.push('/')
     }
 
     const onSearch = async (query: string) => {
-        const res = await privateFetch<string>("/auth/test", {})
+        const res = logout()
         console.log(res)
     }
 

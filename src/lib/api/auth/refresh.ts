@@ -11,7 +11,7 @@ interface RefreshResult {
 }
 
 export const useRefreshAccessToken = () => {
-    const { setAccessToken, logout } = useAuth()
+    const { setAccessToken } = useAuth()
     const { setUser } = useUser()
 
     const refreshAccessToken = async () : Promise<RefreshResult> => {

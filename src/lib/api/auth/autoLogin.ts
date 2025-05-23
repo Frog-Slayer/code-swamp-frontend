@@ -1,20 +1,20 @@
-import { RootState, store } from "@/app/store/store"
+import { store } from "@/app/store/store"
 import { useRefreshAccessToken } from "./refresh"
-import { useDispatch, useSelector } from "react-redux"
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import { useUser } from "@/features/user/hooks/useUser"
+import { useLogout } from "./logout"
 
 let hasAttemptedAutoLogin = false
 
 export const useAutoLogin = () => {
     const refreshAccessToken = useRefreshAccessToken()
-    const dispatch = useDispatch()
+    const logout = useLogout()
 
     const getAccessToken = () => {
         return store.getState().auth.accessToken
     }
 
-    const { setAccessToken, setAuthLoading, logout  } = useAuth()
+    const { setAccessToken, setAuthLoading} = useAuth()
     const { setUser } = useUser()
 
     const attemptAutoLogin = async () => {
@@ -39,8 +39,6 @@ export const useAutoLogin = () => {
         } finally {
             setAuthLoading(false)
         }
-
-
     }
 
     return attemptAutoLogin

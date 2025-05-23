@@ -81,7 +81,6 @@ let refreshPromise: Promise<string | null> | null = null
 export const usePrivateFetch = () => {
     const refreshAccessToken = useRefreshAccessToken()
 
-
     const attemptRefresh = async (): Promise<string | null> => {
         if (!refreshPromise) {
             refreshPromise = (async () => {

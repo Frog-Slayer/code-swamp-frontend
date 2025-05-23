@@ -1,9 +1,15 @@
 import { defaultFetch } from "@/lib/customFetch"
-import { SignupRequest } from "./type"
 
+export interface SignupRequest {
+    token: string
+    email: string
+    username: string
+    nickname: string
+    profileImageUrl: string
+}
 
 export const signUp = async (payload: SignupRequest) : Promise<void> => {
-    await defaultFetch<void>('/users/signup', {
+    const res = await defaultFetch<void>('/users/signup', {
         method: 'POST',
         body: payload 
     })

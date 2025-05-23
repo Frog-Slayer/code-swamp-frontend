@@ -28,7 +28,7 @@ export const authSlice = createSlice({
         setAuthLoadingAction(state, action: PayloadAction<boolean>) {
           state.isAuthLoading = action.payload
         },
-        logoutAction(state) {
+        clear(state) {
           state.accessToken = null
           state.signupToken = null
           state.isAuthenticated = false
@@ -36,5 +36,5 @@ export const authSlice = createSlice({
       }
 })
 
-export const { setAccessTokenAction, setSignupTokenAction, setAuthLoadingAction, logoutAction } = authSlice.actions
+export const { setAccessTokenAction, setSignupTokenAction, setAuthLoadingAction, clear } = authSlice.actions
 export default authSlice.reducer

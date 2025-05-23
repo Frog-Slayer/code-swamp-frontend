@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '@/app/store/store'
-import { setAccessTokenAction, setSignupTokenAction, logoutAction, setAuthLoadingAction } from '@/features/auth/store/authSlice'
+import { setAccessTokenAction, setSignupTokenAction, setAuthLoadingAction, clear} from '@/features/auth/store/authSlice'
 
 export const useAuth = () => {
   const { accessToken, signupToken, isAuthenticated, isAuthLoading } = useSelector((state: RootState) => state.auth)
@@ -14,8 +14,8 @@ export const useAuth = () => {
     dispatch(setSignupTokenAction(signupToken));
   }
 
-  const logout = () => {
-    dispatch(logoutAction())
+  const clearAuthData = () => {
+    dispatch(clear())
   }
 
   const setAuthLoading = (isLoading : boolean) => {
@@ -30,6 +30,6 @@ export const useAuth = () => {
     setAccessToken,
     setAuthLoading,
     setSignupToken,
-    logout,
+    clearAuthData,
   }
 }
