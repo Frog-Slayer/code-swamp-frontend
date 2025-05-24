@@ -1,0 +1,28 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    border-radius:999px;
+    padding: 8px 12px;
+    color: black;;
+    width: 50%;
+    max-height: 48px;
+}
+
+.wrapper:hover {
+    background-color: white;
+    cursor: pointer;
+}
+
+.icon {
+    margin-right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.text {
+    outline: none;
+    font-size: 16px;
+    width: 100%;
+    background-color: transparent;
+}
