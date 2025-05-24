@@ -1,11 +1,11 @@
 'use client'
 
-import { useAuth } from '@/features/auth/hooks/useAuth'
 import { attemptAutoLogin } from '@/lib/api/auth/autoLogin'
 import { useEffect } from 'react'
+import { store } from './store/store'
 
 export default function ClientWrapper({ children }: { children: React.ReactNode }) {
-  const { isAuthLoading } = useAuth() 
+  const isAuthLoading = store.getState().auth.isAuthLoading
 
   useEffect(() => {
     attemptAutoLogin()

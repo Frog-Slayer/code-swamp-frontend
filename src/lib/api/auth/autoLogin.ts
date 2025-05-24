@@ -1,6 +1,4 @@
 import { store } from "@/app/store/store"
-import { useAuth } from "@/features/auth/hooks/useAuth"
-import { useUser } from "@/features/user/hooks/useUser"
 import { refreshAccessToken } from "./refresh"
 import { logout } from "./logout"
 import { setAccessTokenAction, setAuthLoadingAction } from "@/features/auth/store/authSlice"
@@ -8,13 +6,10 @@ import { setUser } from "@/features/user/store/userSlice"
 
 let hasAttemptedAutoLogin = false
 
-
-const getAccessToken = () => {
-    return store.getState().auth.accessToken
-}
-
 export const attemptAutoLogin = async () => {
-    if (getAccessToken()) {
+    const accessToken = store.getState().auth.accessToken
+
+    if (accessToken) {
         store.dispatch(setAuthLoadingAction(false))
         return;
     }

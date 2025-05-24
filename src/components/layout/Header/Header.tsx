@@ -10,18 +10,18 @@ import LoginModal from "@/features/auth/components/LoginModal"
 import { LoginSuccessPayload, NewUserPayload } from "@/features/auth/types/authEvents"
 
 import { useState } from "react"
-import { useAuth } from "@/features/auth/hooks/useAuth"
-import { useUser } from "@/features/user/hooks/useUser"
 import { User } from "@/features/user/types/user"
 import { useRouter } from "next/navigation"
 import { logout } from "@/lib/api/auth/logout"
+import { store } from "@/app/store/store"
+import { setUser } from "@/features/user/store/userSlice"
+import { setAccessTokenAction, setSignupTokenAction } from "@/features/auth/store/authSlice"
 
 const Header = () => {
     const [isLoginModalOpen, setLoginModalOpen] = useState(false)
 
     const router = useRouter()
-    const { setAccessToken, setSignupToken } = useAuth()
-    const { user, setUser } = useUser()
+    const user = store.getState().user.user
 
     const isLoggedIn = Boolean(user)
 
@@ -35,7 +35,7 @@ const Header = () => {
     }
 
     const onLoginSuccess = (payload: LoginSuccessPayload) => {
-        setAccessToken(payload.accessToken)
+        store.dispatch(setAccessTokenAction(payload.accessToken))
 
         const userInfo : User = {
             email: payload.email,
@@ -45,12 +45,12 @@ const Header = () => {
 
         console.log(userInfo)
 
-        setUser( userInfo )
+        store.dispatch(setUser( userInfo ))
         setLoginModalOpen(false)
     }
 
     const onNewUser = (payload: NewUserPayload) => {
-        setSignupToken(payload.signupToken)
+        store.dispatch(setSignupTokenAction(payload.signupToken))
 
         const userInfo : User = {
             email: payload.email,

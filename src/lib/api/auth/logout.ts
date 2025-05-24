@@ -8,20 +8,15 @@ interface LogoutResponse {
 }
 
 export const logout = async () : Promise<LogoutResponse> => {
-        try {
-        const res = await privateFetch<LogoutResponse>('/logout', {
-            method: 'POST',
-        })
+    const res = await privateFetch<LogoutResponse>('/logout', {
+        method: 'POST',
+    })
 
-        if (!res) {
-            throw new Error("Logout failed")
-        }
-
-        store.dispatch(clear())
-        store.dispatch(clearUser())
-        return res
-    }
-    catch (err) {
+    if (!res) {
         throw new Error("Logout failed")
     }
+
+    store.dispatch(clear())
+    store.dispatch(clearUser())
+    return res
 }
