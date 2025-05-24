@@ -1,4 +1,5 @@
 import Image from "next/image";
+import styles from "./Avatar.module.css"
 
 interface AvatarProps {
     src: string;
@@ -19,8 +20,6 @@ const Avatar = ({src, alt, size, onClick }: AvatarProps) => {
             style={{borderRadius: '50%', cursor: 'pointer'}}
             unoptimized
         />
-    )
-}
 
 export default Avatar;
 

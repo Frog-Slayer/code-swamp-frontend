@@ -79,6 +79,7 @@ const Header = () => {
         <header className={styles.header}>
             <div className={styles.left}>
                 <div className={styles.logo} onClick={onLogoClick}>MyLogo</div>
+
             </div>
             
 
