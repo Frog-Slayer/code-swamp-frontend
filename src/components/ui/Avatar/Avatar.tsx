@@ -20,6 +20,8 @@ const Avatar = ({src, alt, size, onClick }: AvatarProps) => {
             style={{borderRadius: '50%', cursor: 'pointer'}}
             unoptimized
         />
+    )
+}
 
 export default Avatar;
 

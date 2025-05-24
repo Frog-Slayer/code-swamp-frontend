@@ -2,9 +2,9 @@ import { RootState } from "@/app/store/store"
 import Avatar from "@/components/ui/Avatar/Avatar"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/DropdownMenu"
 import { useSelector } from "react-redux"
-import styles from "./AvatarDropdownMenu.module.css"
 import { VscSettingsGear } from "react-icons/vsc"
 import { IoIosLogOut } from "react-icons/io"
+import styles from "./AvatarDropdownMenu.module.css"
 
 interface AvatarDropdownMenuProps {
     onClickAvatar: () => void

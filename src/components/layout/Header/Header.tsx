@@ -1,6 +1,5 @@
 'use client'
 
-import Avatar from "@/components/ui/Avatar/Avatar"
 import SearchBar from "../../ui/SearchBar/SearchBar"
 import styles from "./Header.module.css"
 import NewPostButton from "./NewPostButton"
@@ -16,7 +15,6 @@ import { logout } from "@/lib/api/auth/logout"
 import { RootState, store } from "@/app/store/store"
 import { setUser } from "@/features/user/store/userSlice"
 import { setAccessTokenAction, setSignupTokenAction } from "@/features/auth/store/authSlice"
-import { DropdownMenu } from "@/components/ui/DropdownMenu/DropdownMenu"
 import { useSelector } from "react-redux"
 import AvatarDropdownMenu from "./AvatarDropdownMenu"
 
