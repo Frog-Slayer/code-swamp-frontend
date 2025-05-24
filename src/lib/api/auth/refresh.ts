@@ -3,17 +3,9 @@ import { setAccessTokenAction } from "@/features/auth/store/authSlice"
 import { setUser } from "@/features/user/store/userSlice"
 import { defaultFetch } from "@/lib/customFetch"
 
-interface RefreshResult {
-    accessToken: string,
-    userProfile: {
-        nickname: string,
-        profileImage: string
-    }
-}
-
-export const refreshAccessToken = async () : Promise<RefreshResult> => {
+export const refreshAccessToken = async () : Promise<AuthResult> => {
     try {
-        const res = await defaultFetch<RefreshResult> (
+        const res = await defaultFetch<AuthResult> (
             "/auth/refresh",
             {
                 method: "GET",

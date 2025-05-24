@@ -1,21 +1,21 @@
 import { store } from "@/app/store/store"
 import { refreshAccessToken } from "./refresh"
-import { logout } from "./logout"
-import { setAccessTokenAction, setAuthLoadingAction } from "@/features/auth/store/authSlice"
-import { setUser } from "@/features/user/store/userSlice"
+import { clear, setAccessTokenAction, setAuthLoadingAction } from "@/features/auth/store/authSlice"
+import { clearUser, setUser } from "@/features/user/store/userSlice"
 
 let hasAttemptedAutoLogin = false
 
 export const attemptAutoLogin = async () => {
+    if (hasAttemptedAutoLogin) return
+    console.log("attempt to auto login")
+    hasAttemptedAutoLogin = true
+
     const accessToken = store.getState().auth.accessToken
 
     if (accessToken) {
         store.dispatch(setAuthLoadingAction(false))
         return;
     }
-
-    if (hasAttemptedAutoLogin) return
-    hasAttemptedAutoLogin = true
 
     try {
         const res = await refreshAccessToken()
@@ -26,7 +26,8 @@ export const attemptAutoLogin = async () => {
             profileImage: res.userProfile.profileImage
         }))
     } catch (err) {
-        logout()
+        store.dispatch(clear())
+        store.dispatch(clearUser())
     } finally {
         store.dispatch(setAuthLoadingAction(false))
     }

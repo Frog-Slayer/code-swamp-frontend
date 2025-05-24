@@ -63,7 +63,6 @@ export const  defaultFetch = async <T = any>(
         contentLength === "0" ||
         !contentType?.includes("application/json")
     ) {
-
         console.log(response.text())
         return undefined
     }
@@ -72,7 +71,7 @@ export const  defaultFetch = async <T = any>(
     try {
         return await response.json()
     } catch (e) {
-        throw new Error("응답을 JSON으로 파싱하는 데 실패했습니다.")
+        throw new Error("cacnnot parse response to json")
     }
 }
 
@@ -95,17 +94,13 @@ const attemptRefresh = async (): Promise<string | null> => {
     return refreshPromise
 }
 
-const getAccessToken = () => {
-    return store.getState().auth.accessToken
-}
-
-export const privateFetch = async <T>(
+export const privateFetch = async <T = any>(
     uri: string, options: FetchOptions
 ) : Promise<T | undefined>  => {
-    const accessToken = getAccessToken()
-    try {
-        if (!accessToken) throw new Error("No access token available")
+    const accessToken = store.getState().auth.accessToken
 
+    try {
+        if (!accessToken) throw new Error("Unauthroized request")
         const authHeaders = new Headers(options.headers)
         authHeaders.set('Authorization', `Bearer ${accessToken}`)
 

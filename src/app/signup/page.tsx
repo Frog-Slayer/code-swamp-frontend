@@ -1,15 +1,19 @@
 'use client'
 
-import { useAuth } from "@/features/auth/hooks/useAuth"
-import { useUser } from "@/features/user/hooks/useUser"
 import { signUp } from "@/lib/api/user/signup"
-import { useEffect, useState } from "react"
 import SignUpForm from "./SignupForm"
-import { SignupRequest } from "@/lib/api/user/type"
+import { SignupRequest } from "@/lib/api/user/signup"
+import { RootState, store } from "../store/store"
+import { useSelector } from "react-redux"
+import { temporaryLogin } from "@/lib/api/auth/temporaryLogin"
+import { setUser } from "@/features/user/store/userSlice"
+import { setAccessTokenAction } from "@/features/auth/store/authSlice"
+import { useRouter } from "next/navigation"
 
 export default function SignUp() {
-  const { signupToken } = useAuth()
-  const { user } = useUser()
+  const signupToken = useSelector((state: RootState) => state.auth.signupToken)
+  const user = useSelector((state: RootState) => state.user.user)
+  const router = useRouter()
 
   const onSubmit = async (data: SignupRequest) => {
     try {
@@ -22,8 +26,23 @@ export default function SignUp() {
         nickname: data.nickname,
         profileImageUrl: data.profileImageUrl
       })
+
+      const authResult = await temporaryLogin({
+        token: data.token,
+        email: data.email
+      })
+      
+      store.dispatch(setAccessTokenAction(authResult.accessToken))
+      store.dispatch(setUser({
+        name: authResult.userProfile.nickname,
+        profileImage: authResult.userProfile.profileImage
+      }))
+
     } catch (error) {
       console.log(error)
+    }
+    finally {
+      router.push("/")
     }
   }
 

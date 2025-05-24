@@ -54,8 +54,5 @@ export default function AuthCallback() {
     }
   }, [router, searchParams])
 
-  return (
-    <>
-    </>
-  )
+  return ""
 }

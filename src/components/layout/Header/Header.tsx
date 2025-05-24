@@ -13,15 +13,18 @@ import { useState } from "react"
 import { User } from "@/features/user/types/user"
 import { useRouter } from "next/navigation"
 import { logout } from "@/lib/api/auth/logout"
-import { store } from "@/app/store/store"
+import { RootState, store } from "@/app/store/store"
 import { setUser } from "@/features/user/store/userSlice"
 import { setAccessTokenAction, setSignupTokenAction } from "@/features/auth/store/authSlice"
+import { DropdownMenu } from "@/components/ui/DropdownMenu/DropdownMenu"
+import { useSelector } from "react-redux"
+import AvatarDropdownMenu from "./AvatarDropdownMenu"
 
 const Header = () => {
     const [isLoginModalOpen, setLoginModalOpen] = useState(false)
 
     const router = useRouter()
-    const user = store.getState().user.user
+    const user = useSelector((state: RootState) => state.user.user)
 
     const isLoggedIn = Boolean(user)
 
@@ -30,8 +33,6 @@ const Header = () => {
     }
 
     const onSearch = async (query: string) => {
-        const res = logout()
-        console.log(res)
     }
 
     const onLoginSuccess = (payload: LoginSuccessPayload) => {
@@ -42,8 +43,6 @@ const Header = () => {
             name: payload.name,
             profileImage: payload.profileImage
         }
-
-        console.log(userInfo)
 
         store.dispatch(setUser( userInfo ))
         setLoginModalOpen(false)
@@ -58,11 +57,23 @@ const Header = () => {
             profileImage: payload.profileImage
         }
 
-        setUser ( userInfo )
+        store.dispatch(setUser( userInfo ))
         setLoginModalOpen(false)
         router.push('/signup')
     }
 
+    const onClickAvatar = () => {
+
+
+    }
+
+    const onClickSettings = () => {
+
+    }
+
+    const onClickLogout = async () => {
+        await logout()
+    }
 
     return (
         <header className={styles.header}>
@@ -81,11 +92,10 @@ const Header = () => {
                     <>
                         <NewPostButton />
                         <Notification />
-                        <Avatar
-                            src = { user?.profileImage ?? '-'}
-                            alt = "avatar"
-                            size = {40}
-                            onClick={() => console.log("click avatar")}
+                        <AvatarDropdownMenu
+                            onClickAvatar={onClickAvatar}
+                            onClickSettings={onClickSettings}
+                            onClickLogout={onClickLogout}
                         />
                     </>
                 )}

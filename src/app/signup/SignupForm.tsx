@@ -1,11 +1,9 @@
 'use client'
 
 import InputWithValidation from "@/components/ui/InputWithValidation/InputWithValidation"
-import { setUser } from "@/features/user/store/userSlice"
-import { SignupRequest } from "@/lib/api/user/type"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import styles from './SignupForm.module.css'
-import PillButton from "@/components/ui/PillButton/PillButton"
+import { SignupRequest } from "@/lib/api/user/signup"
 
 interface SignupFormProps {
     onSubmit: (form: SignupRequest) => void

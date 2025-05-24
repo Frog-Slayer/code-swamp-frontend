@@ -2,10 +2,11 @@
 
 import { attemptAutoLogin } from '@/lib/api/auth/autoLogin'
 import { useEffect } from 'react'
-import { store } from './store/store'
+import { RootState, store } from './store/store'
+import { useSelector } from 'react-redux'
 
 export default function ClientWrapper({ children }: { children: React.ReactNode }) {
-  const isAuthLoading = store.getState().auth.isAuthLoading
+  const isAuthLoading = useSelector((state: RootState) => state.auth.isAuthLoading)
 
   useEffect(() => {
     attemptAutoLogin()

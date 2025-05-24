@@ -1,4 +1,7 @@
 interface AuthResult {
-    username: string,
-    profileImageUrl: string
+    accessToken: string,
+    userProfile: {
+        nickname: string,
+        profileImage: string
+    }
 }
