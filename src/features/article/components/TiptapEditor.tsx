@@ -16,6 +16,7 @@ import { Underline } from "@tiptap/extension-underline"
 import { Placeholder } from "@tiptap/extension-placeholder"
 
 import './editor-styles.scss'
+import { CodeBlockExtension } from "./CodeBlockExtension"
 
 const TiptapEditor = () => {
   const editor = useEditor({
@@ -29,7 +30,9 @@ const TiptapEditor = () => {
       },
     },
     extensions: [
-      StarterKit,
+      StarterKit.configure(
+        { codeBlock: false }
+      ),
       Placeholder.configure({
         placeholder: '내용 입력'
       }),
@@ -41,9 +44,12 @@ const TiptapEditor = () => {
       Typography,
       Superscript,
       Subscript,
+      CodeBlockExtension,
     ],
     editable: true
   })
+
+  
 
     return (
     <EditorContext.Provider value={{ editor }}>
