@@ -6,6 +6,7 @@ import { RootProvider } from "./provider/provider";
 import ClientWrapper from "./ClientWrapper";
 
 
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
