@@ -14,11 +14,18 @@ import { Subscript } from "@tiptap/extension-subscript"
 import { Superscript } from "@tiptap/extension-superscript"
 import { Underline } from "@tiptap/extension-underline"
 import { Placeholder } from "@tiptap/extension-placeholder"
+import { CodeBlockLowlight} from "@tiptap/extension-code-block-lowlight"
+import { CustomCodeBlock } from "./CustomCodeBlock"
+
+import { all, createLowlight } from 'lowlight'
 
 import './editor-styles.scss'
-import { CodeBlockExtension } from "./CodeBlockExtension"
+import 'highlight.js/styles/monokai.css';
+
 
 const TiptapEditor = () => {
+  const lowlight = createLowlight(all)
+
   const editor = useEditor({
     immediatelyRender: false,
     editorProps: {
@@ -30,9 +37,12 @@ const TiptapEditor = () => {
       },
     },
     extensions: [
-      StarterKit.configure(
-        { codeBlock: false }
-      ),
+      StarterKit.configure({
+        codeBlock: false
+      }),
+      CustomCodeBlock.configure({
+        lowlight
+      }),
       Placeholder.configure({
         placeholder: '내용 입력'
       }),
@@ -44,11 +54,9 @@ const TiptapEditor = () => {
       Typography,
       Superscript,
       Subscript,
-      CodeBlockExtension,
     ],
     editable: true
   })
-
   
 
     return (

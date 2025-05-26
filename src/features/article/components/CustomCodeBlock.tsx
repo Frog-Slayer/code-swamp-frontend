@@ -1,68 +1,117 @@
-`use client`
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
+import { Plugin } from '@tiptap/pm/state'
+import { TextSelection } from 'prosemirror-state'
 
-import { useEffect, useRef } from "react"
-import { EditorView } from "codemirror"
-import { EditorState } from "@codemirror/state"
-import { NodeViewWrapper } from "@tiptap/react"
-import { javascript } from '@codemirror/lang-javascript'
-import { cpp } from '@codemirror/lang-cpp'
-import { java } from '@codemirror/lang-java'
-import { defaultKeymap, historyKeymap, indentWithTab } from '@codemirror/commands'
-import { autocompletion, closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete'
-import { bracketMatching,  } from '@codemirror/language' 
-import { keymap, lineNumbers } from '@codemirror/view'
+export const CustomCodeBlock = CodeBlockLowlight.extend({
 
-const customKeymap = [
-    ...defaultKeymap,
-    ...closeBracketsKeymap,
-    ...historyKeymap,
-    indentWithTab
-  ];
-    
-export const CustomCodeBlock = ({node, updateAttributes} : any) => {
-    const containerRef = useRef<HTMLDivElement>(null)
-    const viewRef = useRef<EditorView | null>(null)
-  
-    useEffect(() => {
-      if (!containerRef.current) return
-  
-      const state = EditorState.create({
-        doc: node.textContent,
-        extensions: [
-          java(),
-          autocompletion(),
-          closeBrackets(),
-          bracketMatching(),
-          lineNumbers(),
-          EditorView.lineWrapping,
-          keymap.of(customKeymap),
-          EditorView.updateListener.of(update => {
-            if (update.docChanged) {
-              const value = update.state.doc.toString()
-              if (value !== node.textContent) {
-                console.log(value)
-                updateAttributes({ text: value })
-              }
-            }
-          }),
-        ],
-      })
-      const view =  new EditorView({
-        state,
-        parent: containerRef.current,
-      })
 
-      viewRef.current = view
-      viewRef.current.focus()
-
-    return () => {
-        view.destroy()
+  addOptions() {
+    return {
+      ...this.parent?.(),
+      exitOnTripleEnter: false,
+      lowlight: {},
+      defaultLanguage: 'plaintext'
     }
-    }, [node.textContent, updateAttributes])
+  },
+
+  addProseMirrorPlugins() {
+    return [
+      ...this.parent?.() || [],
+      new Plugin({
+        props: {
+          handleKeyDown: (view, event) => {
+            const { state } = view
+            const { $from, from, to } = state.selection
+            const isInCodeBlock = $from.parent.type.name === 'codeBlock'
   
-    return (
-      <NodeViewWrapper className="code-block" style={{ border: '1px solid #ccc', borderRadius: 6, padding: 12 }}>
-        <div ref={containerRef} contentEditable={false} />
-      </NodeViewWrapper>
-    )
-}
+            if (!isInCodeBlock) return false
+  
+            if (event.key === 'Tab') {
+              event.preventDefault()
+              view.dispatch(state.tr.insertText('  ', from, to))
+              return true
+            }
+            if (event.key === 'Enter' && !event.shiftKey) {
+              event.preventDefault()
+          
+              const $pos = state.doc.resolve(from)
+              const parent = $pos.parent
+
+              const parentText = $pos.parent.textContent
+              const offsetInParent = $pos.parentOffset
+              
+              const lines = parentText.split('\n')
+              
+              let charCount = 0
+              let currentLine = 0
+              let offsetInLine = 0
+              
+              for (let i = 0; i < lines.length; i++) {
+                if (charCount + lines[i].length >= offsetInParent) {
+                  currentLine = i
+                  offsetInLine = offsetInParent - charCount
+                  break
+                }
+                charCount += lines[i].length + 1
+              }
+              
+              const lineText = lines[currentLine]
+              const textBefore = lineText.slice(0, offsetInLine)
+              
+              const indentMatch = textBefore.match(/^[\t ]+/)
+              const indent = indentMatch ? indentMatch[0] : ''
+
+              view.dispatch(state.tr.insertText('\n' + indent, from))
+              return true
+            }
+
+            if (['(', '[', '{', '"', "'"].includes(event.key)) {
+                event.preventDefault()
+                const pairMap: Record<string, string> = {
+                    '(': ')',
+                    '[': ']',
+                    '{': '}',
+                    '"': '"',
+                    "'": "'",
+                }
+
+                const open = event.key
+                const close = pairMap[open]
+
+                let tr = state.tr.insertText(open + close, from, to)
+
+                tr= tr.setSelection(TextSelection.create(
+                    tr.doc,
+                    from + 1 
+                ))
+
+                view.dispatch(tr)
+                return true
+              }
+              
+              if ([')', ']', '}', '"', "'"].includes(event.key)) {
+                const nextChar = view.state.doc.textBetween(
+                  state.selection.from,
+                  state.selection.from + 1
+                )
+              
+                if (nextChar === event.key) {
+                  event.preventDefault()
+                  view.dispatch(
+                    state.tr.setSelection(TextSelection.create(
+                      state.tr.doc,
+                      state.selection.from + 1 
+                    ))
+                  )
+                  return true
+                }
+              }
+ 
+            return false
+          },
+        },
+      }),
+    ]
+  }
+})
+
