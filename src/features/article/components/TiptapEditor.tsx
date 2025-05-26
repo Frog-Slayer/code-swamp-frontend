@@ -3,19 +3,25 @@
 import * as React from "react"
 import { EditorContent, EditorContext, useEditor } from "@tiptap/react"
 
-import { StarterKit } from "@tiptap/starter-kit"
-import { Image } from "@tiptap/extension-image"
-import { TaskItem } from "@tiptap/extension-task-item"
-import { TaskList } from "@tiptap/extension-task-list"
-import { TextAlign } from "@tiptap/extension-text-align"
-import { Typography } from "@tiptap/extension-typography"
-import { Highlight } from "@tiptap/extension-highlight"
-import { Subscript } from "@tiptap/extension-subscript"
-import { Superscript } from "@tiptap/extension-superscript"
-import { Underline } from "@tiptap/extension-underline"
-import { Placeholder } from "@tiptap/extension-placeholder"
-import { CodeBlockLowlight} from "@tiptap/extension-code-block-lowlight"
+import StarterKit from "@tiptap/starter-kit"
+import Image from "@tiptap/extension-image"
+import TaskItem from "@tiptap/extension-task-item"
+import TaskList from "@tiptap/extension-task-list"
+import Typography from "@tiptap/extension-typography"
+import Highlight from "@tiptap/extension-highlight"
+import Subscript from "@tiptap/extension-subscript"
+import Superscript from "@tiptap/extension-superscript"
+import Underline from "@tiptap/extension-underline"
+import Placeholder from "@tiptap/extension-placeholder"
+import Table from '@tiptap/extension-table'
+import TableRow from '@tiptap/extension-table-row'
+import TableCell from '@tiptap/extension-table-cell'
+import TableHeader from '@tiptap/extension-table-header'
+
+
+
 import { CustomCodeBlock } from "./CustomCodeBlock"
+import { Heading, getToc, TableOfContents} from "./TableOfContents"
 
 import { all, createLowlight } from 'lowlight'
 
@@ -25,6 +31,7 @@ import 'highlight.js/styles/monokai.css';
 
 const TiptapEditor = () => {
   const lowlight = createLowlight(all)
+  const [toc, setToc] = React.useState<Heading[]>([]);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -51,24 +58,37 @@ const TiptapEditor = () => {
       TaskItem.configure({ nested: true }),
       Highlight.configure({ multicolor: true }),
       Image,
+      Table,
+      TableRow,
+      TableCell,
+      TableHeader,
       Typography,
       Superscript,
       Subscript,
     ],
-    editable: true
+    editable: true,
+    onUpdate({ editor }) {
+      setToc(getToc(editor));
+    },
   })
-  
 
     return (
-    <EditorContext.Provider value={{ editor }}>
-          <div className="content-wrapper border border-gray-300 ">
-          <EditorContent
-              editor={editor}
-              role="presentation"
-              placeholder="텍스트 입력"
-          />
+      <div className="flex gap-6">
+        <div className="flex-1 min-h-screen border p-4">
+          <EditorContext.Provider value={{ editor }}>
+              <div className="content-wrapper border border-gray-300 ">
+                <EditorContent
+                    editor={editor}
+                    role="presentation"
+                    placeholder="텍스트 입력"
+                />
+              </div>
+          </EditorContext.Provider>
         </div>
-    </EditorContext.Provider>
+        <aside className="w-64 sticky top-20 h-[calc(100vh-80px)] overflow-auto border p-4">
+          <TableOfContents headings={toc} editor={editor}></TableOfContents>
+        </aside>
+      </div>
   )
 }
 
