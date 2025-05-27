@@ -115,3 +115,5 @@ export const CustomCodeBlock = CodeBlockLowlight.extend({
   }
 })
 
+export default CustomCodeBlock
+

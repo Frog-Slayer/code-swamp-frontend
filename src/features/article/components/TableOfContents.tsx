@@ -39,7 +39,7 @@ export const TableOfContents= ({ headings, editor } : TableOfContentsInterface) 
                 key={i}
                 onClick={() => handleClick(h.pos)}
                 className="cursor-pointer"
-                style={{ marginLeft: `${(h.level - 1) * 20}px` }} 
+                style={{ marginLeft: `${(h.level - 1) * 12}px` }} 
             >
             {h.text}
             </div>

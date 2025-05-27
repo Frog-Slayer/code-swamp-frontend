@@ -20,18 +20,20 @@ import TableHeader from '@tiptap/extension-table-header'
 
 
 
-import { CustomCodeBlock } from "./CustomCodeBlock"
+import CustomCodeBlock from "./CustomCodeBlock"
 import { Heading, getToc, TableOfContents} from "./TableOfContents"
 
 import { all, createLowlight } from 'lowlight'
 
 import './editor-styles.scss'
 import 'highlight.js/styles/monokai.css';
+import EditorTitle from "./EditorTitle"
 
 
 const TiptapEditor = () => {
   const lowlight = createLowlight(all)
   const [toc, setToc] = React.useState<Heading[]>([]);
+  const [title, setTitle] = React.useState("")
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -45,7 +47,7 @@ const TiptapEditor = () => {
     },
     extensions: [
       StarterKit.configure({
-        codeBlock: false
+        codeBlock: false,
       }),
       CustomCodeBlock.configure({
         lowlight
@@ -68,27 +70,53 @@ const TiptapEditor = () => {
     ],
     editable: true,
     onUpdate({ editor }) {
+      console.log(editor.getHTML())
       setToc(getToc(editor));
     },
   })
 
-    return (
+  const onTitlePressEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+
+      const input = e.currentTarget;
+      if (!editor) return;
+
+      const cursorPos = input.selectionStart ?? 0;
+
+      const before = title.slice(0, cursorPos);
+      const after = title.slice(cursorPos);
+
+      setTitle(before.trim());
+
+      if (after.trim()) {
+        console.log(after)
+        editor.commands.insertContentAt(0, {
+          type: 'paragraph',
+          content: [{ type: 'text', text: after.trim()}]
+        })
+      }
+
+      editor.commands.focus('start')
+    }
+  }
+
+  return (
+    <EditorContext.Provider value={{editor}}>
+      <EditorTitle value={title} onChange={setTitle} onEnterPress={onTitlePressEnter} />
       <div className="flex gap-6">
-        <div className="flex-1 min-h-screen border p-4">
-          <EditorContext.Provider value={{ editor }}>
-              <div className="content-wrapper border border-gray-300 ">
-                <EditorContent
-                    editor={editor}
-                    role="presentation"
-                    placeholder="텍스트 입력"
-                />
-              </div>
-          </EditorContext.Provider>
+        <div className="flex-1 min-h-screen border p-4 cursor-text" onClick={()=>editor?.chain().focus()}>
+            <EditorContent
+                editor={editor}
+                role="presentation"
+                placeholder="텍스트 입력"
+            />
         </div>
         <aside className="w-64 sticky top-20 h-[calc(100vh-80px)] overflow-auto border p-4">
           <TableOfContents headings={toc} editor={editor}></TableOfContents>
         </aside>
       </div>
+    </EditorContext.Provider>
   )
 }
 
