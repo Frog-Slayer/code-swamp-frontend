@@ -28,6 +28,7 @@ import { all, createLowlight } from 'lowlight'
 import './editor-styles.scss'
 import 'highlight.js/styles/monokai.css';
 import EditorTitle from "./EditorTitle"
+import CustomHeading from "./CustomHeading"
 
 
 const TiptapEditor = () => {
@@ -48,7 +49,9 @@ const TiptapEditor = () => {
     extensions: [
       StarterKit.configure({
         codeBlock: false,
+        heading: false,
       }),
+      CustomHeading,
       CustomCodeBlock.configure({
         lowlight
       }),
