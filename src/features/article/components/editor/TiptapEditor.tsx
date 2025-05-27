@@ -17,18 +17,20 @@ import Table from '@tiptap/extension-table'
 import TableRow from '@tiptap/extension-table-row'
 import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
+import BulletList from '@tiptap/extension-bullet-list'
+import { Markdown } from 'tiptap-markdown'
 
-
-
-import CustomCodeBlock from "./CustomCodeBlock"
-import { Heading, getToc, TableOfContents} from "./TableOfContents"
 
 import { all, createLowlight } from 'lowlight'
 
+import { Heading, getToc, TableOfContents} from "./TableOfContents"
+import CustomCodeBlock from "./CustomCodeBlock"
+import CustomHeading from "./CustomHeading"
+
+import EditorTitle from "./EditorTitle"
 import './editor-styles.scss'
 import 'highlight.js/styles/monokai.css';
-import EditorTitle from "./EditorTitle"
-import CustomHeading from "./CustomHeading"
+
 
 
 const TiptapEditor = () => {
@@ -70,6 +72,16 @@ const TiptapEditor = () => {
       Typography,
       Superscript,
       Subscript,
+      Markdown.configure({
+        html: true,
+        tightLists: true,
+        tightListClass: 'tight',
+        bulletListMarker: '-',
+        linkify: true,
+        breaks: true,
+        transformPastedText: true,
+        transformCopiedText: true,
+      })
     ],
     editable: true,
     onUpdate({ editor }) {
@@ -115,7 +127,7 @@ const TiptapEditor = () => {
                 placeholder="텍스트 입력"
             />
         </div>
-        <aside className="w-64 sticky top-20 h-[calc(100vh-80px)] overflow-auto border p-4">
+        <aside className="w-64 sticky z-5 top-20 h-[calc(100vh-80px)] overflow-auto border p-4">
           <TableOfContents headings={toc} editor={editor}></TableOfContents>
         </aside>
       </div>
