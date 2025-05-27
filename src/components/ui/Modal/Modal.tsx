@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import styles from "./Modal.module.css"
+import { createPortal } from "react-dom";
 
 
 interface ModalProps {
@@ -15,7 +16,7 @@ const Modal = ({isOpen, handleClose, children}: ModalProps) => {
         e.stopPropagation();
     };
 
-    return (
+    return createPortal(
         <>
           <div className={styles.background}
                 onClick={handleClose}
@@ -25,7 +26,8 @@ const Modal = ({isOpen, handleClose, children}: ModalProps) => {
           >
             {children}
           </div>
-        </>
+        </>,
+        document.body
     )
 }
 

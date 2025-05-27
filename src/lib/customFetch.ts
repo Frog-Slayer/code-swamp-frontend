@@ -37,7 +37,11 @@ export const  defaultFetch = async <T = any>(
         ...rest
     }
 
+    console.log(fetchOptions)
+
     const response = await fetch(url, fetchOptions) 
+
+        console.log(response)
     
     if (!response.ok) {
         let errorMessage
@@ -50,6 +54,8 @@ export const  defaultFetch = async <T = any>(
         } catch (err) {
             errorMessage = `Error: ${response.status}`
         }
+
+        console.log(errorMessage)
 
         throw new Error(errorMessage)
     }
