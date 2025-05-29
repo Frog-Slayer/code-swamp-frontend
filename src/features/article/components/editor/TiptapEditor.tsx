@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { EditorContent, EditorContext, useEditor } from "@tiptap/react"
+import { Editor, EditorContent, EditorContext, useEditor } from "@tiptap/react"
 
 import StarterKit from "@tiptap/starter-kit"
 import Image from "@tiptap/extension-image"
@@ -17,9 +17,7 @@ import Table from '@tiptap/extension-table'
 import TableRow from '@tiptap/extension-table-row'
 import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
-import BulletList from '@tiptap/extension-bullet-list'
 import { Markdown } from 'tiptap-markdown'
-
 
 import { all, createLowlight } from 'lowlight'
 
@@ -31,12 +29,15 @@ import EditorTitle from "./EditorTitle"
 import './editor-styles.scss'
 import 'highlight.js/styles/monokai.css';
 
+interface TiptapEditorProps{
+  onInit?: (editor : Editor | null) => void
+  title: string
+  onTitleChange: (value: string) => void
+}
 
-
-const TiptapEditor = () => {
+const TiptapEditor = ({onInit, title, onTitleChange} : TiptapEditorProps) => {
   const lowlight = createLowlight(all)
   const [toc, setToc] = React.useState<Heading[]>([]);
-  const [title, setTitle] = React.useState("")
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -90,6 +91,13 @@ const TiptapEditor = () => {
     },
   })
 
+  React.useEffect(() => {
+    if (editor && onInit) {
+      const getTitle = () => title
+      onInit(editor)
+    }
+  }, [editor, onInit])
+
   const onTitlePressEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
@@ -102,7 +110,7 @@ const TiptapEditor = () => {
       const before = title.slice(0, cursorPos);
       const after = title.slice(cursorPos);
 
-      setTitle(before.trim());
+      onTitleChange(before.trim());
 
       if (after.trim()) {
         console.log(after)
@@ -118,7 +126,7 @@ const TiptapEditor = () => {
 
   return (
     <EditorContext.Provider value={{editor}}>
-      <EditorTitle value={title} onChange={setTitle} onEnterPress={onTitlePressEnter} />
+      <EditorTitle value={title} onChange={onTitleChange} onEnterPress={onTitlePressEnter} />
       <div className="flex gap-6">
         <div className="flex-1 min-h-screen border p-4 cursor-text" onClick={()=>editor?.chain().focus()}>
             <EditorContent

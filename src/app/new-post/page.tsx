@@ -3,16 +3,53 @@
 import { Button } from "@/components/ui/button";
 import { DirectorySelector } from "@/features/article/components/editor/DirectorySelector";
 import TiptapEditor from "@/features/article/components/editor/TiptapEditor";
-import PublishModal from "@/features/article/components/PublishModal";
+import PublishModal, { PublishModalProps } from "@/features/article/components/PublishModal";
 import { Clock } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { Editor } from "@tiptap/react";
+import { writeArticle } from "@/lib/api/article/write";
+import { testRequest } from "@/lib/api/auth/test";
 
-export default function Page() {
+export default function ArticleWritePage() {
   const [isPublishModalOpen, setPublishModalOpen] = useState(false)
+  const [title, setTitle] = useState('')
+  const [isPublic, setPublic] = useState(false)
+  const [thumbnailUrl, setThumbnailUrl] = useState('')
+  const [summary, setSummary] = useState('')
+  const [slug, setSlug] = useState('')
 
-  const onClickPublish = () => {
+  const editorRef = useRef<Editor | null >(null)
 
+  const onClickPublish = async () => {
+    const content = editorRef.current?.storage.markdown.getMarkdown()
 
+    console.log("title: ", title, "isPublic: ", isPublic, "summary: ", summary, "slug: ", slug, "content: ", content)
+
+    await writeArticle( {
+      title,
+      isPublic,
+      slug,
+      content,
+      thumbnailUrl,
+      summary
+    })
+  }
+
+  const publishModalProps : PublishModalProps = {
+      isOpen: isPublishModalOpen,
+      handleClose: () => setPublishModalOpen(false),
+      submit: onClickPublish,
+
+      title,
+      summary,
+      isPublic,
+      thumbnailUrl,
+      slug,
+
+      setSummary,
+      setPublic,
+      setThumbnailUrl,
+      setSlug,
   }
 
   return (
@@ -26,12 +63,16 @@ export default function Page() {
             </Button>
             <Button variant="outline"> 저장 </Button>
             <Button className="cursor-pointer" onClick={() => setPublishModalOpen(true)}> 발행 </Button>
-            <PublishModal isOpen={isPublishModalOpen} handleClose={()=>setPublishModalOpen(false)}/>
+            <PublishModal {...publishModalProps} />
           </div>
         </div>
 
       <div className="prose dark:prose-invert max-w-none min-h-[300px]">
-        <TiptapEditor />
+        <TiptapEditor 
+          onInit={(editor) => editorRef.current = editor}
+          title={title}
+          onTitleChange={setTitle}
+          />
       </div>
     </div>
   )
