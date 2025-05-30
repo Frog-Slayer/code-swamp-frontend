@@ -8,7 +8,6 @@ import { Clock } from "lucide-react";
 import { ChangeEvent, useRef, useState } from "react";
 import { Editor } from "@tiptap/react";
 import { writeArticle } from "@/lib/api/article/write";
-import { testRequest } from "@/lib/api/auth/test";
 import { postImage } from "@/lib/api/image/postImage";
 
 export default function ArticleWritePage() {

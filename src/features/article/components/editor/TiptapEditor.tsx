@@ -9,8 +9,6 @@ import TaskItem from "@tiptap/extension-task-item"
 import TaskList from "@tiptap/extension-task-list"
 import Typography from "@tiptap/extension-typography"
 import Highlight from "@tiptap/extension-highlight"
-import Subscript from "@tiptap/extension-subscript"
-import Superscript from "@tiptap/extension-superscript"
 import Underline from "@tiptap/extension-underline"
 import Placeholder from "@tiptap/extension-placeholder"
 import Table from '@tiptap/extension-table'
@@ -28,10 +26,7 @@ import CustomHeading from "./customExtensions/CustomHeading"
 import EditorTitle from "./EditorTitle"
 import './editor-styles.scss'
 import 'highlight.js/styles/monokai.css';
-import { handleImageUpload } from "@/lib/tiptap-utils"
-import { postImage } from "@/lib/api/image/postImage"
 import { CustomPasteImageExtension } from "./customExtensions/CustomPasteImageExtension"
-import { CustomImage } from "./customExtensions/CustomImage"
 
 interface TiptapEditorProps{
   onInit?: (editor : Editor | null) => void
@@ -59,7 +54,8 @@ const TiptapEditor = ({onInit, title, onTitleChange} : TiptapEditorProps) => {
         codeBlock: false,
         heading: false,
       }),
-      CustomImage,
+      //CustomImage,
+      Image,
       CustomHeading,
       CustomCodeBlock.configure({
         lowlight

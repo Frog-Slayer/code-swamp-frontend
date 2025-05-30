@@ -1,4 +1,4 @@
-import { mergeAttributes, Node, nodeInputRule } from "@tiptap/core";
+import { mergeAttributes, Node, nodeInputRule, PasteRule } from "@tiptap/core";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 import ImageNodeView from "./ImageNodeView";
 import { ImageOptions } from "@tiptap/extension-image";
@@ -19,15 +19,8 @@ declare module '@tiptap/core' {
   }
 }
 
-/**
- * Matches an image to a ![image](src "title") on input.
- */
 export const inputRegex = /(?:^|\s)(!\[(.+|:?)]\((\S+)(?:(?:\s+)["'](\S+)["'])?\))$/
 
-/**
- * This extension allows you to insert images.
- * @see https://www.tiptap.dev/api/nodes/image
- */
 export const CustomImage = Node.create<ImageOptions>({
   name: 'image',
 
