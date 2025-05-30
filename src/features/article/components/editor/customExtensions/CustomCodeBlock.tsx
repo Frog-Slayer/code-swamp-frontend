@@ -28,7 +28,7 @@ export const CustomCodeBlock = CodeBlockLowlight.extend({
   
             if (event.key === 'Tab') {
               event.preventDefault()
-              view.dispatch(state.tr.insertText('  ', from, to))
+              view.dispatch(state.tr.insertText('  ', from, to)) //TODO => 지정가능하게?
               return true
             }
             if (event.key === 'Enter' && !event.shiftKey) {

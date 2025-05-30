@@ -22,12 +22,16 @@ import { Markdown } from 'tiptap-markdown'
 import { all, createLowlight } from 'lowlight'
 
 import { Heading, getToc, TableOfContents} from "./TableOfContents"
-import CustomCodeBlock from "./CustomCodeBlock"
-import CustomHeading from "./CustomHeading"
+import CustomCodeBlock from "./customExtensions/CustomCodeBlock"
+import CustomHeading from "./customExtensions/CustomHeading"
 
 import EditorTitle from "./EditorTitle"
 import './editor-styles.scss'
 import 'highlight.js/styles/monokai.css';
+import { handleImageUpload } from "@/lib/tiptap-utils"
+import { postImage } from "@/lib/api/image/postImage"
+import { CustomPasteImageExtension } from "./customExtensions/CustomPasteImageExtension"
+import { CustomImage } from "./customExtensions/CustomImage"
 
 interface TiptapEditorProps{
   onInit?: (editor : Editor | null) => void
@@ -38,6 +42,7 @@ interface TiptapEditorProps{
 const TiptapEditor = ({onInit, title, onTitleChange} : TiptapEditorProps) => {
   const lowlight = createLowlight(all)
   const [toc, setToc] = React.useState<Heading[]>([]);
+
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -54,6 +59,7 @@ const TiptapEditor = ({onInit, title, onTitleChange} : TiptapEditorProps) => {
         codeBlock: false,
         heading: false,
       }),
+      CustomImage,
       CustomHeading,
       CustomCodeBlock.configure({
         lowlight
@@ -61,18 +67,16 @@ const TiptapEditor = ({onInit, title, onTitleChange} : TiptapEditorProps) => {
       Placeholder.configure({
         placeholder: '내용 입력'
       }),
+      CustomPasteImageExtension,
       Underline,
       TaskList,
       TaskItem.configure({ nested: true }),
       Highlight.configure({ multicolor: true }),
-      Image,
       Table,
       TableRow,
       TableCell,
       TableHeader,
       Typography,
-      Superscript,
-      Subscript,
       Markdown.configure({
         html: true,
         tightLists: true,
@@ -93,7 +97,6 @@ const TiptapEditor = ({onInit, title, onTitleChange} : TiptapEditorProps) => {
 
   React.useEffect(() => {
     if (editor && onInit) {
-      const getTitle = () => title
       onInit(editor)
     }
   }, [editor, onInit])
@@ -123,6 +126,8 @@ const TiptapEditor = ({onInit, title, onTitleChange} : TiptapEditorProps) => {
       editor.commands.focus('start')
     }
   }
+
+
 
   return (
     <EditorContext.Provider value={{editor}}>
