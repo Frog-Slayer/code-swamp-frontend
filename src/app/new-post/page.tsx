@@ -5,10 +5,11 @@ import { DirectorySelector } from "@/features/article/components/editor/Director
 import TiptapEditor from "@/features/article/components/editor/TiptapEditor";
 import PublishModal, { PublishModalProps } from "@/features/article/components/PublishModal";
 import { Clock } from "lucide-react";
-import { useRef, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { Editor } from "@tiptap/react";
 import { writeArticle } from "@/lib/api/article/write";
 import { testRequest } from "@/lib/api/auth/test";
+import { postImage } from "@/lib/api/image/postImage";
 
 export default function ArticleWritePage() {
   const [isPublishModalOpen, setPublishModalOpen] = useState(false)
@@ -19,6 +20,19 @@ export default function ArticleWritePage() {
   const [slug, setSlug] = useState('')
 
   const editorRef = useRef<Editor | null >(null)
+
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    try {
+      const res = await postImage({ image: file})
+      setThumbnailUrl(res.url)
+      console.log(res.url)
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   const onClickPublish = async () => {
     const content = editorRef.current?.storage.markdown.getMarkdown()
@@ -48,7 +62,7 @@ export default function ArticleWritePage() {
 
       setSummary,
       setPublic,
-      setThumbnailUrl,
+      handleFileChange,
       setSlug,
   }
 

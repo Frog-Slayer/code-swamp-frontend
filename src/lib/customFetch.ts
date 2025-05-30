@@ -37,12 +37,8 @@ export const  defaultFetch = async <T = any>(
         ...rest
     }
 
-    console.log(fetchOptions)
-
     const response = await fetch(url, fetchOptions) 
 
-        console.log(response)
-    
     if (!response.ok) {
         let errorMessage
 
