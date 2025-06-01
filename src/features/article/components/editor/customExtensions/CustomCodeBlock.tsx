@@ -4,7 +4,6 @@ import { TextSelection } from 'prosemirror-state'
 
 export const CustomCodeBlock = CodeBlockLowlight.extend({
 
-
   addOptions() {
     return {
       ...this.parent?.(),
@@ -28,14 +27,13 @@ export const CustomCodeBlock = CodeBlockLowlight.extend({
   
             if (event.key === 'Tab') {
               event.preventDefault()
-              view.dispatch(state.tr.insertText('  ', from, to))
+              view.dispatch(state.tr.insertText('  ', from, to)) //TODO => 지정가능하게?
               return true
             }
             if (event.key === 'Enter' && !event.shiftKey) {
               event.preventDefault()
           
               const $pos = state.doc.resolve(from)
-              const parent = $pos.parent
 
               const parentText = $pos.parent.textContent
               const offsetInParent = $pos.parentOffset

@@ -2,7 +2,7 @@
 
 import { attemptAutoLogin } from '@/lib/api/auth/autoLogin'
 import { useEffect } from 'react'
-import { RootState, store } from './store/store'
+import { RootState } from './store/store'
 import { useSelector } from 'react-redux'
 
 export default function ClientWrapper({ children }: { children: React.ReactNode }) {

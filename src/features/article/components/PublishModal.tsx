@@ -3,6 +3,7 @@ import Thumbnail from "./Thumbnail";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { ChangeEvent } from "react";
 
 export interface PublishModalProps{
     isOpen: boolean
@@ -14,9 +15,9 @@ export interface PublishModalProps{
 
     setSummary: (value: string) => void
     setPublic: (value: boolean) => void
-    setThumbnailUrl: (value: string) => void
     setSlug: (value: string) => void
 
+    handleFileChange: (e: ChangeEvent<HTMLInputElement>) => void
     handleClose: () => void
     submit?: () => void
 }
@@ -30,7 +31,7 @@ const PublishModal = (props : PublishModalProps) => {
             {props.title || '제목 없음'}
           </div>
             
-          <Thumbnail />
+          <Thumbnail src={props.thumbnailUrl} onFileChange={props.handleFileChange}/>
           <textarea
             className="w-full resize-y p-2 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="설명"
