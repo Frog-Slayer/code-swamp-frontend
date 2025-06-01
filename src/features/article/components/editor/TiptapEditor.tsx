@@ -4,7 +4,6 @@ import * as React from "react"
 import { Editor, EditorContent, EditorContext, useEditor } from "@tiptap/react"
 
 import StarterKit from "@tiptap/starter-kit"
-import Image from "@tiptap/extension-image"
 import TaskItem from "@tiptap/extension-task-item"
 import TaskList from "@tiptap/extension-task-list"
 import Typography from "@tiptap/extension-typography"
@@ -15,6 +14,7 @@ import Table from '@tiptap/extension-table'
 import TableRow from '@tiptap/extension-table-row'
 import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
+import Image from '@tiptap/extension-image'
 import { Markdown } from 'tiptap-markdown'
 
 import { all, createLowlight } from 'lowlight'
@@ -27,6 +27,7 @@ import EditorTitle from "./EditorTitle"
 import './editor-styles.scss'
 import 'highlight.js/styles/monokai.css';
 import { CustomPasteImageExtension } from "./customExtensions/CustomPasteImageExtension"
+import { NodeSelection } from "@tiptap/pm/state"
 
 interface TiptapEditorProps{
   onInit?: (editor : Editor | null) => void
@@ -54,8 +55,9 @@ const TiptapEditor = ({onInit, title, onTitleChange} : TiptapEditorProps) => {
         codeBlock: false,
         heading: false,
       }),
-      //CustomImage,
-      Image,
+      Image.configure({
+        inline: false
+      }),
       CustomHeading,
       CustomCodeBlock.configure({
         lowlight
@@ -84,6 +86,7 @@ const TiptapEditor = ({onInit, title, onTitleChange} : TiptapEditorProps) => {
         transformCopiedText: true,
       })
     ],
+    autofocus: true,
     editable: true,
     onUpdate({ editor }) {
       console.log(editor.getHTML())
@@ -123,18 +126,30 @@ const TiptapEditor = ({onInit, title, onTitleChange} : TiptapEditorProps) => {
     }
   }
 
+  const handleClickOnBlank = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!editor) return;
 
+    const { state } = editor;
+    const { doc } = state;
+    const pos = editor.view.posAtCoords({ left: e.clientX, top: e.clientY });
+    
+    if (!pos) {
+      const docSize = state.doc.content.size;
+      editor.commands.focus();
+      editor.commands.setTextSelection(docSize);
+    }
+  }
 
   return (
     <EditorContext.Provider value={{editor}}>
       <EditorTitle value={title} onChange={onTitleChange} onEnterPress={onTitlePressEnter} />
       <div className="flex gap-6">
-        <div className="flex-1 min-h-screen border p-4 cursor-text" onClick={()=>editor?.chain().focus()}>
-            <EditorContent
-                editor={editor}
-                role="presentation"
-                placeholder="텍스트 입력"
-            />
+        <div className="flex-1 min-h-screen border p-4 cursor-text" onClick={handleClickOnBlank}>
+          <EditorContent
+            editor={editor}
+            role="presentation"
+            placeholder="텍스트 입력"
+          />
         </div>
         <aside className="w-64 sticky z-5 top-20 h-[calc(100vh-80px)] overflow-auto border p-4">
           <TableOfContents headings={toc} editor={editor}></TableOfContents>

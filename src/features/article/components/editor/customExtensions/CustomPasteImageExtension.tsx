@@ -25,7 +25,7 @@ export const CustomPasteImageExtension = Extension.create({
                     .then(({url}) => {
                       editor.chain()
                         .focus()
-                        .setImage({ src : url})
+                        .setImage({src: url})
                         .run()
                     })
                     .catch((err) => {

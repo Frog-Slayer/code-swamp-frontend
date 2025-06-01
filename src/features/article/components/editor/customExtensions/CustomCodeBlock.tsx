@@ -4,7 +4,6 @@ import { TextSelection } from 'prosemirror-state'
 
 export const CustomCodeBlock = CodeBlockLowlight.extend({
 
-
   addOptions() {
     return {
       ...this.parent?.(),
@@ -35,7 +34,6 @@ export const CustomCodeBlock = CodeBlockLowlight.extend({
               event.preventDefault()
           
               const $pos = state.doc.resolve(from)
-              const parent = $pos.parent
 
               const parentText = $pos.parent.textContent
               const offsetInParent = $pos.parentOffset

@@ -120,3 +120,13 @@
     max-width: 400px;
   }
 }
+
+.ProseMirror:focus {
+  outline: none;
+}
+
+img.ProseMirror-selectednode {
+  inset: 0;
+  background-color: rgba(59, 130, 246, 0.3); /* 파란 반투명 */
+  z-index: 2;
+}
