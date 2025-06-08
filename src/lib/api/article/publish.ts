@@ -1,9 +1,8 @@
-import { privateFetch } from "@/lib/customFetch"
+import { privateFetch } from "@/lib/fetch/privateFetch"
 
 interface PublishRequest{
     title: string
     diff: string,
-    type: string,
     isPublic: boolean,
     thumbnailUrl: string | null
     slug: string
@@ -42,7 +41,7 @@ export const updatePublish = async (payload : PublishUpdateRequest, articleId: s
         const res = await privateFetch<PublishResult>(
             `/articles/${articleId}/publish`, 
             {
-                method: 'PATCH', 
+                method: 'POST', 
                 body: payload,
             })
         if (!res) throw new Error("cannot publish this version")

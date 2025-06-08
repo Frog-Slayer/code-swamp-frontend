@@ -1,4 +1,4 @@
-import { defaultFetch } from "@/lib/customFetch"
+import { defaultFetch } from "@/lib/fetch/defaultFetch"
 
 interface TempLoginRequest {
     email: string,

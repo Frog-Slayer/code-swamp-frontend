@@ -7,11 +7,11 @@ import PublishModal, { PublishModalProps } from "@/features/article/components/P
 import { Clock } from "lucide-react";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Editor } from "@tiptap/react";
-import { writeArticle } from "@/lib/api/article/write";
 import { postImage } from "@/lib/api/image/postImage";
 import { createDraft, DraftResult, updateDraft } from "@/lib/api/article/draft";
-import { createPatch, diffLines } from "diff";
-import { readVersionedArticle } from "@/lib/api/article/read";
+import { createPatch, } from "diff";
+import { readVersionedArticle } from "@/lib/api/article/read/readVersionedArticle"
+import { createPublish, updatePublish } from "@/lib/api/article/publish";
 
 export default function ArticleWritePage() {
   const [isPublishModalOpen, setPublishModalOpen] = useState(false)
@@ -45,23 +45,28 @@ export default function ArticleWritePage() {
     }
   }
 
-  const onClickPublish = async () => {
+  const publish = async () => {
     const content = editorRef.current?.storage.markdown.getMarkdown()
+    const diff = createPatch('', lastSavedContent, content, '', '')
 
-    await writeArticle({
+    const data = { 
       title,
+      diff,
       isPublic,
-      slug,
-      content,
       thumbnailUrl,
-      summary
-    })
+      slug,
+      summary,
+      folderId: "1",
+    }
+
+    if (articleId && versionId) return await updatePublish({ ...data, versionId }, articleId )
+    return await createPublish(data)
   }
 
   const publishModalProps : PublishModalProps = {
       isOpen: isPublishModalOpen,
       handleClose: () => setPublishModalOpen(false),
-      submit: onClickPublish,
+      submit: publish,
 
       title,
       summary,
