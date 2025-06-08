@@ -1,15 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 interface AuthState{
-    accessToken: string | null
-    signupToken: string | null
+    accessToken: string
+    signupToken: string
     isAuthLoading: boolean
     isAuthenticated: boolean
 }
 
 const initialState: AuthState = {
-    accessToken: null,
-    signupToken: null,
+    accessToken: '',
+    signupToken: '',
     isAuthLoading: true,
     isAuthenticated: false
 }
@@ -29,8 +29,8 @@ export const authSlice = createSlice({
           state.isAuthLoading = action.payload
         },
         clear(state) {
-          state.accessToken = null
-          state.signupToken = null
+          state.accessToken = ''
+          state.signupToken = ''
           state.isAuthenticated = false
         },
       }

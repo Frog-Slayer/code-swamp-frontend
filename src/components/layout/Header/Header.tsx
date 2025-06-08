@@ -17,6 +17,8 @@ import { setUser } from "@/features/user/store/userSlice"
 import { setAccessTokenAction, setSignupTokenAction } from "@/features/auth/store/authSlice"
 import { useSelector } from "react-redux"
 import AvatarDropdownMenu from "./AvatarDropdownMenu"
+import PillButton from "@/components/ui/PillButton/PillButton"
+import { CiSquarePlus } from "react-icons/ci"
 
 const Header = () => {
     const [isLoginModalOpen, setLoginModalOpen] = useState(false)
@@ -61,13 +63,16 @@ const Header = () => {
     }
 
     const onClickAvatar = () => {
-
-
     }
 
     const onClickSettings = () => {
 
     }
+
+    const onClickNewPost = () => {
+        router.push('/post')
+    }
+
 
     const onClickLogout = async () => {
         await logout()
@@ -89,7 +94,7 @@ const Header = () => {
             <div className={styles.right}>
                 { isLoggedIn && (
                     <>
-                        <NewPostButton />
+                        <PillButton Icon={CiSquarePlus} label="새 글" onClick={onClickNewPost} />
                         <Notification />
                         <AvatarDropdownMenu
                             onClickAvatar={onClickAvatar}
@@ -101,7 +106,7 @@ const Header = () => {
 
                 { !isLoggedIn &&  (
                     <>
-                        <LoginButton onClick={() => setLoginModalOpen(true)}/>
+                        <PillButton onClick={() => setLoginModalOpen(true)} label ="로그인"/> 
                         <LoginModal isOpen={isLoginModalOpen} onClose={() => setLoginModalOpen(false)} onLoginSuccess={onLoginSuccess} onNewUser={onNewUser}/>
                     </>
                 )}

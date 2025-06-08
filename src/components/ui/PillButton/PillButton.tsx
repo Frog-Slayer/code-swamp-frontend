@@ -4,7 +4,7 @@ import styles from "./PillButton.module.css"
 interface PillButtonProps {
     Icon?: IconType;
     label: string;
-    onClick: () => void;
+    onClick?: () => void;
 };
 
 const PillButton = ({Icon, label, onClick}: PillButtonProps) => {
