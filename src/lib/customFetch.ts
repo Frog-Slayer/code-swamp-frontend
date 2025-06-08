@@ -102,7 +102,6 @@ export const privateFetch = async <T = any>(
     const accessToken = store.getState().auth.accessToken
 
     try {
-        if (!accessToken) throw new Error("Unauthroized request")
         const authHeaders = new Headers(options.headers)
         authHeaders.set('Authorization', `Bearer ${accessToken}`)
 

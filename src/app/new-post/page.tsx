@@ -5,10 +5,13 @@ import { DirectorySelector } from "@/features/article/components/editor/Director
 import TiptapEditor from "@/features/article/components/editor/TiptapEditor";
 import PublishModal, { PublishModalProps } from "@/features/article/components/PublishModal";
 import { Clock } from "lucide-react";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Editor } from "@tiptap/react";
 import { writeArticle } from "@/lib/api/article/write";
 import { postImage } from "@/lib/api/image/postImage";
+import { createDraft, DraftResult, updateDraft } from "@/lib/api/article/draft";
+import { createPatch, diffLines } from "diff";
+import { readVersionedArticle } from "@/lib/api/article/read";
 
 export default function ArticleWritePage() {
   const [isPublishModalOpen, setPublishModalOpen] = useState(false)
@@ -17,6 +20,15 @@ export default function ArticleWritePage() {
   const [thumbnailUrl, setThumbnailUrl] = useState('')
   const [summary, setSummary] = useState('')
   const [slug, setSlug] = useState('')
+
+  const [lastSavedTitle, setLastSavedTitle] = useState('')
+  const [lastSavedContent, setLastSavedContent] = useState('')
+  const [lastSavedTime, setLastSavedTime] = useState(Date.now())
+
+  const [articleId, setArticleId] = useState<string| undefined>(undefined)
+  const [versionId, setVersionId] = useState<string| undefined>(undefined)
+
+  const autoDraftIntervalMin : number = 1000 * 60 * 10
 
   const editorRef = useRef<Editor | null >(null)
 
@@ -36,9 +48,7 @@ export default function ArticleWritePage() {
   const onClickPublish = async () => {
     const content = editorRef.current?.storage.markdown.getMarkdown()
 
-    console.log("title: ", title, "isPublic: ", isPublic, "summary: ", summary, "slug: ", slug, "content: ", content)
-
-    await writeArticle( {
+    await writeArticle({
       title,
       isPublic,
       slug,
@@ -65,16 +75,51 @@ export default function ArticleWritePage() {
       setSlug,
   }
 
+  const saveDraftInternal = async(diff: string) : Promise<DraftResult> => {
+    if (articleId && versionId) return await updateDraft({ title, folderId: "1", diff }, articleId, versionId )
+    return await createDraft({ title, folderId: "1", diff })
+  }
+
+  const saveDraft = async () => {
+    const content = editorRef.current?.storage.markdown.getMarkdown()
+    if (lastSavedContent === content && lastSavedTitle === title) return
+    const diff = createPatch('', lastSavedContent, content, '', '')
+
+    const { articleId: resArticleId, versionId: newVersionId } = await saveDraftInternal(diff)
+
+    setLastSavedTitle(title)
+    setLastSavedTime(Date.now())
+    setLastSavedContent(content)
+    if (!articleId) setArticleId(resArticleId)
+    setVersionId(newVersionId)
+  }
+
+  useEffect(() => {
+      const interval = setInterval(() => {
+          const now = Date.now()
+
+          if (now - lastSavedTime >= autoDraftIntervalMin) {
+            saveDraft()
+          }
+      }, 60 * 1000)
+
+      return () => clearInterval(interval)
+  }, [lastSavedTime])
+
+  const test = async () => {
+    if (articleId && versionId)  await readVersionedArticle(articleId, versionId)
+  }
+
   return (
     <div className="flex flex-col gap-6 px-6 py-8 max-w-4xl mx-auto">
         <div className="top-0 sticky w-full border-b bg-white px-6 py-4 flex items-center justify-between">
           <DirectorySelector/>
 
           <div className="flex items-center space-x-2">
-            <Button variant="outline"> 
+            <Button className="cursor-pointer" variant="outline" onClick={test}> 
               <Clock/> 히스토리 
             </Button>
-            <Button variant="outline"> 저장 </Button>
+            <Button className="cursor-pointer" variant="outline" onClick={saveDraft}> 초안 저장 </Button>
             <Button className="cursor-pointer" onClick={() => setPublishModalOpen(true)}> 발행 </Button>
             <PublishModal {...publishModalProps} />
           </div>
