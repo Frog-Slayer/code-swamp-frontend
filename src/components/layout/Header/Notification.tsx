@@ -1,5 +1,4 @@
 import { IoIosNotificationsOutline } from "react-icons/io";
-import styles from "./Notification.module.css"
 
 const Notification = () => {
 
