@@ -1,14 +1,15 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef } from "react"
 
-interface EditorTitleProps {
+interface ArticleTitleEditorProps {
   value: string
   onChange: (val: string) => void
   onEnterPress?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void
+  className?: string
 }
 
-export default function EditorTitle({ value, onChange, onEnterPress }: EditorTitleProps) {
+const ArticleTitleEditor = ({ value, onChange, onEnterPress, className }: ArticleTitleEditorProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
@@ -25,9 +26,11 @@ export default function EditorTitle({ value, onChange, onEnterPress }: EditorTit
       onChange={e => onChange(e.target.value)}
       onKeyDown={onEnterPress}
       placeholder="제목을 입력하세요"
+      className={className}
       rows={1}
-      className="text-3xl font-bold outline-none w-full max-w-2xl resize-none overflow-hidden"
       style={{ whiteSpace: "pre-wrap" }}
     />
   )
 }
+
+export default ArticleTitleEditor
