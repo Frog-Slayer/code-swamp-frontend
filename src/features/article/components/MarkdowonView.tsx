@@ -1,5 +1,4 @@
 import MarkdownIt from 'markdown-it' 
-import './editor/editor-styles.scss'
 
 const md = new MarkdownIt({
     html: true,

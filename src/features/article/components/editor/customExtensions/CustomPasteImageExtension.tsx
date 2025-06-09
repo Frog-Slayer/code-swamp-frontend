@@ -43,3 +43,5 @@ export const CustomPasteImageExtension = Extension.create({
     ]
   },
 })
+
+export default CustomPasteImageExtension
