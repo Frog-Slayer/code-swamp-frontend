@@ -12,7 +12,8 @@ interface SignupFormProps {
 
 const SignUpForm = ({ onSubmit, defaultValues } : SignupFormProps) => {
   const token = defaultValues?.token ?? ''
-  const [email, setEmail] = useState(defaultValues?.email ?? '')
+  const email = defaultValues?.email ?? ''
+
   const [profileImage, setProfileImage] = useState(defaultValues?.profileImageUrl ?? '')
   const [username, setUsername] = useState('')
   const [nickname, setNickname] = useState(defaultValues?.nickname ?? '')

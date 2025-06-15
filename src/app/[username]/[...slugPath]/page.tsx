@@ -1,6 +1,6 @@
-import { DirectorySelector } from "@/features/article/components/editor/DirectorySelector"
-import EditorTitle from "@/features/article/components/editor/EditorTitle"
-import MarkdownRenderer from "@/features/article/components/MarkdowonView"
+import ArticleTitleView from "@/features/article/components/ArticleTitle/ArticleTitleView"
+import { DirectorySelector } from "@/features/article/components/DirectorySelector/DirectorySelector"
+import MarkdownRenderer from "@/features/article/components/ArticleContent/MarkdowonView"
 import { readBySlug } from "@/lib/api/article/read/readBySlug"
 import { TableOfContents } from "lucide-react"
 
@@ -25,9 +25,7 @@ const ReadPage = async ({ params } : ReadPageProps) => {
         </div>
 
       <div className="prose dark:prose-invert max-w-none min-h-[300px]">
-        <div className="text-3xl font-bold outline-none w-full max-w-2xl resize-none overflow-hidden">
-            {res.title}
-        </div>
+        <ArticleTitleView title={res.title}/>
         <div> authorId: {res.authorId} createdAt: {res.createdAt} updatedAt: {res.updatedAt} </div>
         <div className="flex gap-6">
             <div className="flex-1 min-h-screen border p-4 cursor-text">
