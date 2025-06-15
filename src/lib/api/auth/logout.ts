@@ -9,7 +9,7 @@ interface LogoutResponse {
 
 export const logout = async () => {
     try {
-        const res = await privateFetch<LogoutResponse>('/logout', {
+        const res = await privateFetch<LogoutResponse>('/auth/logout', {
             method: 'POST',
         })
     }
