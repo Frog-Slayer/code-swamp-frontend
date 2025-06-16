@@ -1,6 +1,6 @@
 import ArticleTitleView from "@/features/article/components/ArticleTitle/ArticleTitleView"
-import { DirectorySelector } from "@/features/article/components/DirectorySelector/DirectorySelector"
-import MarkdownRenderer from "@/features/article/components/ArticleContent/MarkdowonView"
+import { DirectorySelector } from "@/features/article/components/DirectorySelector"
+import MarkdownRenderer from "@/features/article/components/ArticleContent/MarkdownRenderer"
 import { readBySlug } from "@/lib/api/article/read/readBySlug"
 import { TableOfContents } from "lucide-react"
 

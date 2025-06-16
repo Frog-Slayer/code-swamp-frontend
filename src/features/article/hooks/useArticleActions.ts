@@ -20,6 +20,10 @@ export const useArticleActions = ({ editor, state, dispatch }: Props) => {
     dispatch({ type: 'SET_TITLE', title: title})
   }, [dispatch])
 
+  const setFolder = useCallback((folderId: string) => {
+    dispatch({ type: 'SET_FOLDER', folderId})
+  }, [dispatch])
+
   const isSavingRef = useRef(false)//=>useEffect doubleRenderring을 막기 위한 lock
   const saveDraft = useCallback(async () => {
     if (!editor) return
@@ -32,10 +36,11 @@ export const useArticleActions = ({ editor, state, dispatch }: Props) => {
 
         const diff = createPatch('', state.lastSavedContent, content, '', '')
         console.log(diff)
+        console.log(state.folderId)
 
         const result = state.articleId && state.versionId
-        ? await updateDraft({ title: state.title, folderId: '1', diff }, state.articleId, state.versionId)
-        : await createDraft({ title: state.title, folderId: '1', diff })
+        ? await updateDraft({ title: state.title, folderId: state.folderId, diff }, state.articleId, state.versionId)
+        : await createDraft({ title: state.title, folderId: state.folderId, diff })
 
         console.log(result.articleId, result.versionId)
 
@@ -57,7 +62,7 @@ export const useArticleActions = ({ editor, state, dispatch }: Props) => {
       thumbnailUrl: state.thumbnailUrl,
       slug: state.slug,
       summary: state.summary,
-      folderId: "1",
+      folderId: state.folderId,
     }
 
     if (state.articleId && state.versionId) await updatePublish({ ...data, versionId: state.versionId }, state.articleId)
@@ -91,6 +96,7 @@ export const useArticleActions = ({ editor, state, dispatch }: Props) => {
 
   return {
     setTitle,
+    setFolder,
     saveDraft,
     publish,
     openPublishModal: () => setPublishModalOpen(true),

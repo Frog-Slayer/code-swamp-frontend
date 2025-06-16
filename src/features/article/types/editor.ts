@@ -4,6 +4,7 @@ export type ArticleState = {
     summary: string
     thumbnailUrl: string
     isPublic: boolean
+    folderId: string
     articleId?: string
     versionId?: string
     lastSavedTitle: string
@@ -16,5 +17,6 @@ export type ArticleAction =
     | { type: 'SET_SLUG', slug: string}
     | { type: 'SET_SUMMARY', summary: string}
     | { type: 'SET_THUMBNAIL', url: string }
+    | { type: 'SET_FOLDER', folderId: string }
     | { type: 'SET_PUBLIC', isPublic: boolean }
     | { type: 'SAVE', title: string, content: string, articleId: string, versionId: string}

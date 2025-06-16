@@ -2,12 +2,11 @@
 
 import { EditorContext, EditorContent } from "@tiptap/react"
 import { useCustomEditor } from "../components/editor/useCustomEditor"
-import { useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 import PublishModal, { PublishModalProps } from "../components/PublishModal"
 import ArticleTitle from "../components/ArticleTitle"
 
-import { DirectorySelector } from "../components/DirectorySelector/DirectorySelector"
 import TableOfContents, { getToc, Heading } from "../components/TableOfContents/TableOfContents"
 
 import { Clock } from "lucide-react"
@@ -17,6 +16,11 @@ import { useArticleReducer } from "../hooks/useArticleReducer"
 import { useArticleActions } from "../hooks/useArticleActions"
 
 import '../components/ArticleContent/editor-styles.scss'
+import FolderBreadcrumb from "@/components/folder/BreadCrumb/FolderBreadcrumb"
+import { Folder, FolderMap, toFolderMap } from "@/components/folder/types"
+import { getMyFolders, getUserFolders } from "@/lib/api/folder/getFolders"
+import { renameFolder } from "@/lib/api/folder/renameFolder"
+import { createFolder } from "@/lib/api/folder/createFolder"
 
 const ArticleEditPage = () => {
     const autoDraftInterval : number = 10 //sec
@@ -26,10 +30,30 @@ const ArticleEditPage = () => {
         setToc(getToc(editor))
     }})
 
-    const { setTitle, saveDraft, openPublishModal, publishModalProps} = useArticleActions({ state, dispatch, editor })
+    const { setFolder, setTitle, saveDraft, openPublishModal, publishModalProps} = useArticleActions({ state, dispatch, editor })
 
     const [toc, setToc] = useState<Heading[]>([]);
     const [autoDraftTimer, setAutoDraftTimer] = useState(autoDraftInterval)
+    const [folders, setFolders] = useState<FolderMap>({});
+    const [rootFolder, setRootFolder] = useState<Folder | undefined>(undefined);
+
+    useEffect(() => {
+        const fetchFolders = async () => {
+            const folderList = await getMyFolders();
+            const folderMap = toFolderMap(folderList.folders);
+
+            setFolders(folderMap);
+
+            const root = Object.values(folderMap).find(folder => folder.parentId === null);
+
+            setRootFolder(root);
+            if (!state.folderId) {
+                if (root) setFolder(root.id)
+            }
+        };
+
+        fetchFolders();
+    }, []);
 
     useEffect(() => {
         setAutoDraftTimer(autoDraftInterval)
@@ -85,10 +109,66 @@ const ArticleEditPage = () => {
         }
     }
 
+    const handleSelectFolder = useCallback((folderId : string) => {
+        setFolder(folderId)
+    }, [setFolder])
+
+    const handleRenameFolder = useCallback( async (folderId : string, newName: string) => {
+        console.log(folders[folderId])
+        const res = await renameFolder({ 
+            folderId,
+            newName
+        })
+
+        console.log(res.message)
+        console.log(folders[folderId])
+
+        const renamed : Folder = { 
+            ...folders[folderId],
+            name: newName
+        }
+
+        setFolders(prev => ({
+            ...prev,
+            [renamed.id]: renamed
+        }))
+
+
+    }, [setFolder, folders])
+
+    const handleCreateFolder = useCallback(async (parentId: string, name: string) => {
+        const res = await createFolder({ 
+            parentId,
+            name
+        })
+
+        const created : Folder = {
+            id: res.folderId,
+            parentId: res.parentId,
+            name: res.name
+        }
+
+        setFolders(prev => ({ 
+            ...prev,
+            [created.id]: created
+        }))
+
+        setFolder(res.folderId)
+    }, [setFolder])
+
+
     return ( 
         <EditorContext.Provider value={{editor}}>
             <div className="top-0 sticky w-full border-b bg-white px-6 py-4 flex items-center justify-between">
-                <DirectorySelector/>
+                { state.folderId && ( 
+                    <FolderBreadcrumb
+                        folders={folders}
+                        currentFolderId={state.folderId}
+                        onSelectFolder={handleSelectFolder}
+                        onRenameFolder={handleRenameFolder}
+                        onCreateFolder={handleCreateFolder}
+                    />
+                )}
                 <div className="flex items-center space-x-2">
                     <Button className="cursor-pointer" variant="outline"> 
                         <Clock/> 히스토리 
