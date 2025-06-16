@@ -9,7 +9,6 @@ interface RenameFolderResponse {
     message: string
 }
 
-
 export const renameFolder = async (payload : RenameFolderRequest) 
 : Promise<RenameFolderResponse> => {
     const folderId = payload.folderId
@@ -17,10 +16,10 @@ export const renameFolder = async (payload : RenameFolderRequest)
 
     try {
         const res = await privateFetch<RenameFolderResponse>(
-            `/folders`, 
+            `/folders/${folderId}/rename`, 
             {
-                method: 'POST', 
-                body: payload
+                method: 'PATCH', 
+                body: { newName }
             })
         if (!res) throw new Error("cannot create folder")
 

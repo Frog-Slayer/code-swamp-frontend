@@ -118,6 +118,19 @@ const ArticleEditPage = () => {
             folderId,
             newName
         })
+
+        const renamed : Folder = { 
+            id: folderId,
+            parentId: folders[folderId].parentId,
+            name: newName
+        }
+
+        setFolders(prev => ({
+            ...prev,
+            [renamed.id]: renamed
+        }))
+
+
     }, [setFolder])
 
     const handleCreateFolder = useCallback(async (parentId: string, name: string) => {

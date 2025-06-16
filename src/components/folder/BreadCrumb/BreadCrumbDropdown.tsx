@@ -65,7 +65,7 @@ const BreadcrumbDropdown = ({
                                 else if (e.key === 'Escape') setRenamingFolderId(null)
                             }}
                         />
-                    ) : 
+                    ) : (
                         <>
                             <span onClick={() => onSelect(folder.id)}>
                                 {folder.name}
@@ -74,40 +74,45 @@ const BreadcrumbDropdown = ({
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation()
-                                        if (folder.parentId != null) setRenameInput(folder.name)
+                                        setRenamingFolderId(folder.id)
                                     }}
                                 >
                                     (Rename)
                                 </button>
                             )}
                         </>
-                    }
+                    )}
                 </div>
             ))}
 
-            {isAddingNew ? (
-            <div>
-                <input
-                    placeholder="New folder name"
-                    value={newFolderName}
-                    onClick={(e) => {e.stopPropagation(), e.preventDefault()}}
-                    onChange={(e) => setNewFolderName(e.target.value)}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter") finishCreate();
-                        else if (e.key === "Escape") setIsAddingNew(false);
-                    }}
-                />
-                <button onClick={finishCreate} > 💾 </button>
-                <button onClick={() => setIsAddingNew(false)}> ✕ </button>
-            </div>
-            ) : (
-                <div onClick={(e) => { 
-                    e.stopPropagation()
-                    e.preventDefault()
-                    setIsAddingNew(true)}} >
-                    + New Folder
-                </div>
-            )}
+            {parentId && (
+                <>
+                    {isAddingNew ? (
+                        <div>
+                            <input
+                                placeholder="New folder name"
+                                value={newFolderName}
+                                onClick={(e) => {e.stopPropagation(), e.preventDefault()}}
+                                onChange={(e) => setNewFolderName(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") finishCreate();
+                                    else if (e.key === "Escape") setIsAddingNew(false);
+                                }}
+                            />
+                            <button onClick={finishCreate} > 💾 </button>
+                            <button onClick={() => setIsAddingNew(false)}> ✕ </button>
+                        </div>
+                        ) : (
+                            <div onClick={(e) => { 
+                                e.stopPropagation()
+                                e.preventDefault()
+                                setIsAddingNew(true)}} >
+                                + New Folder
+                            </div>
+                        )}
+                </>
+            ) 
+        }
         </>
     )
 }
