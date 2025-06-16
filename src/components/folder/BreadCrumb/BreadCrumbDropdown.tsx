@@ -1,9 +1,8 @@
-import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import { Folder, FolderMap } from "../types";
 import { useEffect, useState } from "react";
 
 interface BreadcrumbDropdownProps { 
-    currentFolderId : string
+    parentId: string | null
     folders: FolderMap
     onSelect: (folderId: string) => void
     onRename: (folderId: string, newName: string) => void
@@ -11,15 +10,12 @@ interface BreadcrumbDropdownProps {
 }
 
 const BreadcrumbDropdown = ({
-    currentFolderId,
+    parentId,
     folders,
     onSelect,
     onRename,
     onCreate
 } : BreadcrumbDropdownProps) => {
-    const currentFolder = folders[currentFolderId]
-    const parentId = currentFolder?.parentId ?? null
-
     const siblings= Object.values(folders).filter( 
             f => f.parentId === parentId
         )
@@ -56,7 +52,7 @@ const BreadcrumbDropdown = ({
 
     return (
         <>
-            { siblings.map((folder) => {
+            { siblings.map((folder) => (
                 <div key={folder.id}> 
                     { renamingFolderId === folder.id ? ( 
                         <input
@@ -71,30 +67,30 @@ const BreadcrumbDropdown = ({
                         />
                     ) : 
                         <>
-                            <DropdownMenuItem onClick={() => onSelect(folder.id)}>
+                            <span onClick={() => onSelect(folder.id)}>
                                 {folder.name}
-                            </DropdownMenuItem>
-                            <button
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    if (folder.parentId != null) setRenameInput(folder.id)
-                                }}
-                            >
-                                (Rename)
-                            </button>
+                            </span>
+                            {folder.parentId != null && (
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        if (folder.parentId != null) setRenameInput(folder.name)
+                                    }}
+                                >
+                                    (Rename)
+                                </button>
+                            )}
                         </>
                     }
                 </div>
-            })}
-
-            <div/>
+            ))}
 
             {isAddingNew ? (
             <div>
                 <input
-                    autoFocus
                     placeholder="New folder name"
                     value={newFolderName}
+                    onClick={(e) => {e.stopPropagation(), e.preventDefault()}}
                     onChange={(e) => setNewFolderName(e.target.value)}
                     onKeyDown={(e) => {
                         if (e.key === "Enter") finishCreate();
@@ -105,12 +101,12 @@ const BreadcrumbDropdown = ({
                 <button onClick={() => setIsAddingNew(false)}> ✕ </button>
             </div>
             ) : (
-            <DropdownMenuItem
-                className="text-green-600 cursor-pointer"
-                onClick={() => setIsAddingNew(true)}
-            >
-                ➕ New Folder
-            </DropdownMenuItem>
+                <div onClick={(e) => { 
+                    e.stopPropagation()
+                    e.preventDefault()
+                    setIsAddingNew(true)}} >
+                    + New Folder
+                </div>
             )}
         </>
     )

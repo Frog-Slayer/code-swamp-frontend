@@ -6,7 +6,9 @@ interface CreateFolderRequest{
 }
 
 interface CreateFolderResponse {
-    message: string
+    folderId: string,
+    parentId: string,
+    name: string
 }
 
 export const createFolder = async (payload : CreateFolderRequest) 

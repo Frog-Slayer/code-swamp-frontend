@@ -9,11 +9,12 @@ import {
     DropdownMenu,
     DropdownMenuTrigger,
     DropdownMenuContent,
-    DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 
 import { Folder, FolderMap } from "@/components/folder/types"
 import BreadcrumbDropdown from "./BreadCrumbDropdown";
+import React, { useEffect, useState } from "react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 interface FolderBreadCurmbProps{ 
     folders: FolderMap,
@@ -30,6 +31,9 @@ const FolderBreadcrumb = ({
     onRenameFolder,
     onCreateFolder
 } : FolderBreadCurmbProps) => {
+
+    const [isAddingNew, setIsAddingNew] = useState(false)
+    const [newFolderName, setNewFolderName] = useState("")
 
     const buildPathToRoot = () : Folder[] =>  {
         const path: Folder[] = []
@@ -48,34 +52,63 @@ const FolderBreadcrumb = ({
 
     const path = buildPathToRoot()
 
+    const finishCreate = () => {
+        if (newFolderName.trim()) {
+            onCreateFolder(currentFolderId, newFolderName.trim());
+            setNewFolderName("");
+            setIsAddingNew(false);
+        }
+    };
+
     return( 
         <Breadcrumb>
             <BreadcrumbList>
-            {path.map((folder, index) => {
-                return ( 
-                    <div key={folder.id}>
-                        <BreadcrumbItem> 
-                            <DropdownMenu>
-                                <DropdownMenuTrigger>
-                                    {folder.name}
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="start">
-                                    <BreadcrumbDropdown
-                                        currentFolderId={folder.id}
-                                        folders={folders}
-                                        onSelect={onSelectFolder}
-                                        onRename={onRenameFolder}
-                                        onCreate={onCreateFolder}
-                                    />
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </BreadcrumbItem>
-                    </div>
-                )
-            })}
+                {path.map((folder, index) => {
+                    const isLast = index === path.length - 1;
+
+                    return ( 
+                        <div key={folder.id} className="flex">
+                            <BreadcrumbItem> 
+                                <Popover>
+                                    <PopoverTrigger className="cursor-pointer">
+                                        {folder.name}
+                                    </PopoverTrigger>
+                                    <PopoverContent align="start">
+                                        <BreadcrumbDropdown
+                                            parentId={folder.parentId}
+                                            folders={folders}
+                                            onSelect={onSelectFolder}
+                                            onRename={onRenameFolder}
+                                            onCreate={onCreateFolder}
+                                        />
+                                    </PopoverContent>
+                                </Popover>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator/>
+                        </div>
+                    )
+                })}
+            
+                <BreadcrumbItem> 
+                    <Popover>
+                        <PopoverTrigger className="cursor-pointer">
+                            ...
+                        </PopoverTrigger>
+                        <PopoverContent align="start">
+                            <BreadcrumbDropdown
+                                parentId={currentFolderId}
+                                folders={folders}
+                                onSelect={onSelectFolder}
+                                onRename={onRenameFolder}
+                                onCreate={onCreateFolder}
+                            />
+                        </PopoverContent>
+                    </Popover>
+                </BreadcrumbItem>
             </BreadcrumbList>    
+
         </Breadcrumb>
     )
 }
 
-export default FolderBreadcrumb
+export default React.memo(FolderBreadcrumb)

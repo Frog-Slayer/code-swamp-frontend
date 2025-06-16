@@ -2,7 +2,7 @@
 
 import { EditorContext, EditorContent } from "@tiptap/react"
 import { useCustomEditor } from "../components/editor/useCustomEditor"
-import { useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 import PublishModal, { PublishModalProps } from "../components/PublishModal"
 import ArticleTitle from "../components/ArticleTitle"
@@ -34,7 +34,6 @@ const ArticleEditPage = () => {
 
     const [toc, setToc] = useState<Heading[]>([]);
     const [autoDraftTimer, setAutoDraftTimer] = useState(autoDraftInterval)
-
     const [folders, setFolders] = useState<FolderMap>({});
     const [rootFolder, setRootFolder] = useState<Folder | undefined>(undefined);
 
@@ -48,7 +47,9 @@ const ArticleEditPage = () => {
             const root = Object.values(folderMap).find(folder => folder.parentId === null);
 
             setRootFolder(root);
-            if (root) setFolder(root.id)
+            if (!state.folderId) {
+                if (root) setFolder(root.id)
+            }
         };
 
         fetchFolders();
@@ -108,31 +109,45 @@ const ArticleEditPage = () => {
         }
     }
 
-    const handleSelectFolder = (folderId : string) => {
+    const handleSelectFolder = useCallback((folderId : string) => {
         setFolder(folderId)
-    }
+    }, [setFolder])
 
-    const handleRenameFolder = async (folderId : string, newName: string) => {
+    const handleRenameFolder = useCallback(async (folderId : string, newName: string) => {
         await renameFolder({ 
             folderId,
             newName
         })
-    }
+    }, [setFolder])
 
-    const handleCreateFolder = async (parentId: string, name: string) => {
-        await createFolder({ 
+    const handleCreateFolder = useCallback(async (parentId: string, name: string) => {
+        const res = await createFolder({ 
             parentId,
             name
         })
-    }
+
+        const created : Folder = {
+            id: res.folderId,
+            parentId: res.parentId,
+            name: res.name
+        }
+
+        setFolders(prev => ({ 
+            ...prev,
+            [created.id]: created
+        }))
+
+        setFolder(res.folderId)
+    }, [setFolder])
+
 
     return ( 
         <EditorContext.Provider value={{editor}}>
             <div className="top-0 sticky w-full border-b bg-white px-6 py-4 flex items-center justify-between">
-                { rootFolder && ( 
+                { state.folderId && ( 
                     <FolderBreadcrumb
                         folders={folders}
-                        currentFolderId={rootFolder.id}
+                        currentFolderId={state.folderId}
                         onSelectFolder={handleSelectFolder}
                         onRenameFolder={handleRenameFolder}
                         onCreateFolder={handleCreateFolder}
