@@ -1,4 +1,4 @@
-const BASE_URL = 'https://code-swamp.dev/api'
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL
 
 type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE'
 

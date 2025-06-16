@@ -7,6 +7,7 @@ const initialState: ArticleState = {
   slug: '',
   summary: '',
   thumbnailUrl: '',
+  folderId: '',
   isPublic: false,
   articleId: undefined,
   versionId: undefined,
@@ -25,6 +26,8 @@ const reducer = (state: ArticleState, action: ArticleAction): ArticleState => {
       return { ...state, isPublic: action.isPublic }
     case 'SET_SLUG':
       return { ...state, slug: action.slug}
+    case 'SET_FOLDER':
+      return { ...state, folderId: action.folderId}
     case 'SET_SUMMARY':
       return { ...state, summary: action.summary}
     case 'SAVE':
