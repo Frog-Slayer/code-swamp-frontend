@@ -5,12 +5,6 @@ import {
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-import {
-    DropdownMenu,
-    DropdownMenuTrigger,
-    DropdownMenuContent,
-} from "@/components/ui/dropdown-menu";
-
 import { Folder, FolderMap } from "@/components/folder/types"
 import BreadcrumbDropdown from "./BreadCrumbDropdown";
 import React, { useEffect, useState } from "react";
@@ -52,20 +46,10 @@ const FolderBreadcrumb = ({
 
     const path = buildPathToRoot()
 
-    const finishCreate = () => {
-        if (newFolderName.trim()) {
-            onCreateFolder(currentFolderId, newFolderName.trim());
-            setNewFolderName("");
-            setIsAddingNew(false);
-        }
-    };
-
     return( 
         <Breadcrumb>
             <BreadcrumbList>
-                {path.map((folder, index) => {
-                    const isLast = index === path.length - 1;
-
+                {path.map((folder) => {
                     return ( 
                         <div key={folder.id} className="flex">
                             <BreadcrumbItem> 

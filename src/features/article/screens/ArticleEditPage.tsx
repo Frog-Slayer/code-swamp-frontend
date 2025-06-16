@@ -113,15 +113,18 @@ const ArticleEditPage = () => {
         setFolder(folderId)
     }, [setFolder])
 
-    const handleRenameFolder = useCallback(async (folderId : string, newName: string) => {
-        await renameFolder({ 
+    const handleRenameFolder = useCallback( async (folderId : string, newName: string) => {
+        console.log(folders[folderId])
+        const res = await renameFolder({ 
             folderId,
             newName
         })
 
+        console.log(res.message)
+        console.log(folders[folderId])
+
         const renamed : Folder = { 
-            id: folderId,
-            parentId: folders[folderId].parentId,
+            ...folders[folderId],
             name: newName
         }
 
@@ -131,7 +134,7 @@ const ArticleEditPage = () => {
         }))
 
 
-    }, [setFolder])
+    }, [setFolder, folders])
 
     const handleCreateFolder = useCallback(async (parentId: string, name: string) => {
         const res = await createFolder({ 
