@@ -47,7 +47,7 @@ export const Streak = ({ activityData }: StreakProps) => {
         <Card className="w-fit"> 
              <CardHeader>
                 <CardTitle className="flex items-center justify-between">
-                    <span>활동 그래프</span>
+                    <span>스트릭</span>
                 </CardTitle>
             </CardHeader>
             <CardContent>
