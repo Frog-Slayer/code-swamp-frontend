@@ -1,4 +1,4 @@
-import { Folder, FolderMap } from "../types";
+import { Folder, FolderMap } from "../../types/folder";
 import { useEffect, useState } from "react";
 
 interface BreadcrumbDropdownProps { 
@@ -35,9 +35,9 @@ const BreadcrumbDropdown = ({
         }
       }, [renamingFolderId, folders]);
     
-    const finishRename = async () => {
+    const finishRename = () => {
         if (renamingFolderId && renameInput.trim()) {
-            await onRename(renamingFolderId, renameInput.trim());
+            onRename(renamingFolderId, renameInput.trim());
             setRenamingFolderId(null);
         }
     };

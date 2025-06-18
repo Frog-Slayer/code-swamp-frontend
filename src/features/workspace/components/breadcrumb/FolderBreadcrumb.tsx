@@ -5,10 +5,11 @@ import {
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-import { Folder, FolderMap } from "@/components/folder/types"
+import { Folder, FolderMap } from "@/features/workspace/types/folder"
 import BreadcrumbDropdown from "./BreadCrumbDropdown";
 import React, { useEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { buildPathToRoot } from "@/features/workspace/utils/buildPathToRoot"
 
 interface FolderBreadCurmbProps{ 
     folders: FolderMap,
@@ -29,22 +30,7 @@ const FolderBreadcrumb = ({
     const [isAddingNew, setIsAddingNew] = useState(false)
     const [newFolderName, setNewFolderName] = useState("")
 
-    const buildPathToRoot = () : Folder[] =>  {
-        const path: Folder[] = []
-
-        let currentId: string | null = currentFolderId
-
-        while (currentId) { 
-            const folder : Folder = folders[currentId]
-            if (!folder) break
-            path.push(folder)
-            currentId = folder.parentId
-        }
-
-        return path.reverse()
-    }
-
-    const path = buildPathToRoot()
+    const path = buildPathToRoot(currentFolderId, folders)
 
     return( 
         <Breadcrumb>

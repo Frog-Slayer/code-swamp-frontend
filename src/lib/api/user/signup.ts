@@ -1,4 +1,4 @@
-import { defaultFetch } from "@/lib/fetch/defaultFetch"
+import { defaultFetch } from "@/lib/api/fetch/defaultFetch"
 
 export interface SignupRequest {
     token: string

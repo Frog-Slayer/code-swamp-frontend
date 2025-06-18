@@ -1,4 +1,4 @@
-import { privateFetch } from "@/lib/fetch/privateFetch"
+import { privateFetch } from "@/lib/api/fetch/privateFetch"
 
 export const testRequest = async () : Promise<{testVal: string}> => {
     try {

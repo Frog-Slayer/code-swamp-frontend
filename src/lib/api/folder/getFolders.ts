@@ -1,5 +1,5 @@
-import { defaultFetch } from "@/lib/fetch/defaultFetch"
-import { privateFetch } from "@/lib/fetch/privateFetch"
+import { defaultFetch } from "@/lib/api/fetch/defaultFetch"
+import { privateFetch } from "@/lib/api/fetch/privateFetch"
 
 export interface FolderDto {
     id : string,

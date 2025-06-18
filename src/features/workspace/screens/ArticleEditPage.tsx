@@ -16,8 +16,8 @@ import { useArticleReducer } from "../hooks/useArticleReducer"
 import { useArticleActions } from "../hooks/useArticleActions"
 
 import '../components/ArticleContent/editor-styles.scss'
-import FolderBreadcrumb from "@/components/folder/BreadCrumb/FolderBreadcrumb"
-import { Folder, FolderMap, toFolderMap } from "@/components/folder/types"
+import FolderBreadcrumb from "@/features/workspace/folder/breadcrumb/FolderBreadcrumb"
+import { Folder, FolderMap, toFolderMap } from "@/features/workspace/types/folder"
 import { getMyFolders, getUserFolders } from "@/lib/api/folder/getFolders"
 import { renameFolder } from "@/lib/api/folder/renameFolder"
 import { createFolder } from "@/lib/api/folder/createFolder"
