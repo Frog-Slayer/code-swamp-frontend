@@ -26,15 +26,10 @@ export const Streak = ({ activityData }: StreakProps) => {
     currentWeekStart.setDate(today.getDate() - currentWeekStart.getDay())
 
     const start = new Date(currentWeekStart)
-    start.setDate(start.getDate() - 26 * 7) // 6개월 전
-
-
-    const end = new Date(currentWeekStart)
-    end.setDate(end.getDate() + 26 * 7 + 6) // 6개월 후
-
+    start.setDate(start.getDate() - 365)
 
     const data: Activity[] = []
-    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+    for (let d = new Date(start); d <= today; d.setDate(d.getDate() + 1)) {
       const dateStr = toDateString(d)
       const count = activityData[dateStr] ?? 0
       data.push({
