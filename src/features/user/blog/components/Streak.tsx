@@ -45,11 +45,6 @@ export const Streak = ({ activityData }: StreakProps) => {
     
     return (
         <Card className="w-fit"> 
-             <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                    <span>스트릭</span>
-                </CardTitle>
-            </CardHeader>
             <CardContent>
                 <ActivityCalendar
                     data={data}
