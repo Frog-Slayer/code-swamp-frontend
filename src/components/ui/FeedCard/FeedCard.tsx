@@ -14,6 +14,7 @@ export interface FeedCardProps{
   likes: number
   tags: string[]
 
+  author: string
   nickname: string
   authorAvatar: string
 }
@@ -34,7 +35,9 @@ const FeedCard = ({ post } : { post: FeedCardProps}) => {
             <CardHeader className="pb-3">
               <CardTitle className="line-clamp-2 text-lg group-hover:text-primary transition-colors">{post.title}</CardTitle>
               <CardDescription className="flex items-center gap-2 text-sm">
-                <img src={post.authorAvatar}/>
+                <Link href ={`/${post.author}`}>
+                  <img src={post.authorAvatar}/>
+                </Link>
                 <span>{post.nickname}</span>
                 <span>•</span>
                 <span>{post.publishedAt}</span>
