@@ -6,10 +6,10 @@ export interface Folder {
     parentId: string | null
 }
 
-export type FolderMap = Record<string, Folder>
+export type FolderRecord = Record<string, Folder>
 
-export const toFolderMap = (folders: FolderDto[]) : FolderMap => {
-    const map: FolderMap = {}
+export const toFolderMap = (folders: FolderDto[]) : FolderRecord => {
+    const map: FolderRecord = {}
 
     folders.forEach( folder => {
         map[folder.id] = {

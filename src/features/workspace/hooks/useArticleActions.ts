@@ -5,7 +5,7 @@ import { createPatch } from "diff"
 import { createPublish, updatePublish } from "@/lib/api/article/publish"
 import { PublishModalProps } from "../components/PublishModal"
 import { Editor } from "@tiptap/react"
-import { ArticleState, ArticleAction } from "../types/editor"
+import { ArticleState, ArticleAction } from "./types"
 
 type Props = {
   editor: Editor | null

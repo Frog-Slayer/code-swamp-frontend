@@ -1,6 +1,6 @@
 // hooks/useArticleReducer.ts
 import { useReducer } from "react"
-import { ArticleState, ArticleAction } from "../types/editor"
+import { ArticleState, ArticleAction } from "./types"
 
 const initialState: ArticleState = {
   title: '',

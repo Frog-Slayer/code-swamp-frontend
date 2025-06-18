@@ -1,7 +1,7 @@
 'use client'
 
 import { EditorContext, EditorContent } from "@tiptap/react"
-import { useCustomEditor } from "../components/editor/useCustomEditor"
+import { useCustomEditor } from "../editor/useCustomEditor"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 import PublishModal, { PublishModalProps } from "../components/PublishModal"
@@ -16,8 +16,8 @@ import { useArticleReducer } from "../hooks/useArticleReducer"
 import { useArticleActions } from "../hooks/useArticleActions"
 
 import '../components/ArticleContent/editor-styles.scss'
-import FolderBreadcrumb from "@/features/workspace/folder/breadcrumb/FolderBreadcrumb"
-import { Folder, FolderMap, toFolderMap } from "@/features/workspace/types/folder"
+import FolderBreadcrumb from "@/features/workspace/components/BreadCrumb/FolderBreadcrumb"
+import { Folder, FolderRecord, toFolderMap } from "@/features/workspace/types/folder"
 import { getMyFolders, getUserFolders } from "@/lib/api/folder/getFolders"
 import { renameFolder } from "@/lib/api/folder/renameFolder"
 import { createFolder } from "@/lib/api/folder/createFolder"
@@ -34,7 +34,7 @@ const ArticleEditPage = () => {
 
     const [toc, setToc] = useState<Heading[]>([]);
     const [autoDraftTimer, setAutoDraftTimer] = useState(autoDraftInterval)
-    const [folders, setFolders] = useState<FolderMap>({});
+    const [folders, setFolders] = useState<FolderRecord>({});
     const [rootFolder, setRootFolder] = useState<Folder | undefined>(undefined);
 
     useEffect(() => {

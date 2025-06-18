@@ -5,14 +5,14 @@ import {
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-import { Folder, FolderMap } from "@/features/workspace/types/folder"
+import { Folder, FolderRecord } from "@/features/workspace/types/folder"
 import BreadcrumbDropdown from "./BreadCrumbDropdown";
 import React, { useEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { buildPathToRoot } from "@/features/workspace/utils/buildPathToRoot"
 
 interface FolderBreadCurmbProps{ 
-    folders: FolderMap,
+    folders: FolderRecord,
     currentFolderId : string,
     onSelectFolder: (folderId: string) => void
     onRenameFolder: (folderId: string, newName: string) => void

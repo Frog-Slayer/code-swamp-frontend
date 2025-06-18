@@ -1,9 +1,9 @@
-import { Folder, FolderMap } from "../../types/folder";
+import { Folder, FolderRecord } from "../../types/folder";
 import { useEffect, useState } from "react";
 
 interface BreadcrumbDropdownProps { 
     parentId: string | null
-    folders: FolderMap
+    folders: FolderRecord
     onSelect: (folderId: string) => void
     onRename: (folderId: string, newName: string) => void
     onCreate: (parentId: string, name: string) => void

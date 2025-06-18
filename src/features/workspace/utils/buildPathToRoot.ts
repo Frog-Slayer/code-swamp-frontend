@@ -1,6 +1,6 @@
-import { Folder, FolderMap } from "../types/folder"
+import { Folder, FolderRecord } from "../types/folder"
 
-export const buildPathToRoot = (currentFolderId: string, folders: FolderMap) : Folder[] =>  {
+export const buildPathToRoot = (currentFolderId: string, folders: FolderRecord) : Folder[] =>  {
     const path: Folder[] = []
 
     let currentId: string | null = currentFolderId
