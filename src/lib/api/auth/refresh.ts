@@ -21,6 +21,8 @@ export const refreshAccessToken = async () : Promise<AuthResult> => {
             name: res.userProfile.nickname,
             profileImage: res.userProfile.profileImage
         }))
+
+        console.log(res)
         return res
     }
     catch (err) {

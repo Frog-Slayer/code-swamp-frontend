@@ -8,8 +8,12 @@ export interface SignupRequest {
     profileImageUrl: string
 }
 
-export const signUp = async (payload: SignupRequest) : Promise<void> => {
-    const res = await defaultFetch<void>('/users/signup', {
+interface SignupResponse {
+    otp: string
+}
+
+export const signUp = async (payload: SignupRequest) : Promise<SignupResponse> => {
+    const res = await defaultFetch<SignupResponse>('/users/signup', {
         method: 'POST',
         body: payload 
     })

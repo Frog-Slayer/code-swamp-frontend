@@ -2,57 +2,59 @@ import Portfolio from "@/features/user/blog/components/Portfolio";
 import FeedCard, { FeedCardProps } from "@/components/ui/FeedCard/FeedCard";
 import { Streak } from "@/features/user/blog/components/Streak";
 import BlogProfile, { BlogProfileProps } from "@/features/user/blog/components/BlogProfile";
+import BlogPage from "@/features/user/blog/screens/BlogPage";
 
 export default function Home() {
-  const post : FeedCardProps ={
-    fullPath: "full",
-    thumbnail: "thumb",
-    title: "title",
-    summary: "string",
-    publishedAt: "2025-06-19",
-    views: 100,
-    likes: 100,
-    tags: ["Kotlin"],
-    author: "@reunai",
+  const testData = {
+    // ---Profile---
+    userid: "u123456",
+    username: "youngseo",
     nickname: "박영서",
-    authorAvatar: "-"
-  }
+    profileImage: "https://lh3.googleusercontent.com/a/ACg8ocKLE3BwEidtEOiDjm2Ef97Yn5Skcm-JsbSQulE8Y4v12AI5eqCl=s288-c-no",
+    bio: "백엔드 개발자 지망생입니다. 관심사는 Spring, Neo4j, 그리고 생산성입니다.",
+  
+    company: "OpenAI",
+    school: "Seoul National University",
+  
+    // contact
+    website: "https://youngseo.dev",
+    email: "youngseo@example.com",
+    github: "youngseo123",
+    linkedin: "youngseo-profile",
+  
+    // tags
+    tags: ["Spring", "Kotlin", "Neo4j", "Clean Architecture"],
+  
+    // stats
+    totalPosts: 42,
+    totalViews: 15893,
+    followers: 122,
+    following: 47,
+  
+    // portfolio
+    portfolio: `
+https://youngseo.dev/portfolio
+포트폴리오
+입
+이니다
+## 가나다
 
-  const activityData =  {
-    "2025-01-01": 2,
-    "2025-01-02": 1,
-    "2025-01-03": 3,
-    "2025-01-05": 1,
-    "2025-01-08": 2,
-    "2025-01-15": 4,
-    "2025-01-20": 2,
-    "2025-01-25": 3,
-    "2025-02-01": 1,
-    "2025-02-05": 2,
-  }
-
-  const user : BlogProfileProps = {
-    userid: "123",
-    username: "reunai",
-    nickname: "박영서dldldldldld",
-    profileImage: "",
-    bio: "hello",
-    tags: ["hi"],
-    totalPosts: 10,
-    totalViews: 100,
-    github: "frog_slayer",
-    streak: 1000,
-    followers: 99,
-    following: 100
-  }
+`
+    ,
+  
+    // activity data (YYYY-MM-DD → count)
+    activityData: {
+      "2025-06-01": 2,
+      "2025-06-02": 1,
+      "2025-06-17": 3,
+      "2025-06-18": 1,
+      "2025-06-19": 2,
+    },
+  };
 
   return (
     <div> 
-      <BlogProfile user={user}/>
-      <Streak activityData={activityData}/>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <FeedCard post={post}/>
-      </div>
+      <BlogPage {...testData}/> 
     </div>
   );
 }

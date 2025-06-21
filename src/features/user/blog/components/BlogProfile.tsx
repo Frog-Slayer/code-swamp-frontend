@@ -1,6 +1,6 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Briefcase, Code, Github, Globe, Linkedin } from "lucide-react";
 import { ElementType } from "react";
 
@@ -68,21 +68,21 @@ const Stat = ({ value, tag }: { value: number; tag: string }) => {
   );
 };
 
-const BlogProfile = ({ user }: { user: BlogProfileProps }) => {
+const BlogProfile = (user: BlogProfileProps) => {
   return (
-    <div className="flex flex-col lg:flex-row gap-6 items-start">
+    <div className="flex flex-col lg:flex-row gap-6 items-start w-full m-4">
       {/* Profile Info */}
-      <div className="flex flex-col sm:flex-row gap-4 items-start lg:items-center flex-1">
+      <div className="flex flex-col space-x-3 sm:flex-row gap-4 items-start lg:items-center flex-1">
         <div className="relative">
-          <Avatar className="w-20 h-20 ring-4 ring-primary/20 shadow-lg">
+          <Avatar className="w-40 h-40 ">
             <AvatarImage
               src={user.profileImage || "/placeholder.svg"}
               alt={user.nickname}
             />
-            <AvatarFallback className="text-2xl font-bold">
+            <AvatarFallback className="w-full h-full flex items-center justify-center text-2xl font-bold bg-muted text-muted-foreground">
               {user.nickname.charAt(0)}
             </AvatarFallback>
-          </Avatar>
+            </Avatar>
         </div>
 
         <div className="space-y-3 flex-1">

@@ -10,10 +10,7 @@ const MarkdownRenderer = ({ markdown } : {markdown : string}) => {
     const html = md.render(markdown)
 
     return ( 
-        <div
-            className="tiptap"
-            dangerouslySetInnerHTML={{ __html: html }}
-        />
+        <div dangerouslySetInnerHTML={{ __html: html }}/>
     )
 }
 
