@@ -15,7 +15,7 @@ const SocialLoginButton = ({Icon, label, provider}: SocialLoginButtonProps) => {
         const top = window.screen.height / 2 - height / 2;
     
         const popup = window.open(
-            `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/${provider}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/auth/oauth2/authorization/${provider}`,
             `${provider}Login`,
             `width=${width},height=${height},top=${top},left=${left}`
         );

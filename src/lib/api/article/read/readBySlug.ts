@@ -1,9 +1,9 @@
-import { ssrFetch } from "@/lib/fetch/ssrFetch"
+import { ssrFetch } from "@/lib/api/fetch/ssrFetch"
 
 export const readBySlug = async (username: string, path: string) : Promise<ReadArticleResult> => {
     try {
         const res = await ssrFetch<ReadArticleResult>(
-            `/articles/@${username}/${path}`, 
+            `/article-query/articles/@${username}/${path}`, 
             {
                 method: 'GET', 
             })

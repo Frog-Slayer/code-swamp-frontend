@@ -1,7 +1,7 @@
 import { store } from "@/app/store/store"
 import { setAccessTokenAction } from "@/features/auth/store/authSlice"
 import { setUser } from "@/features/user/store/userSlice"
-import { defaultFetch } from "@/lib/fetch/defaultFetch"
+import { defaultFetch } from "@/lib/api/fetch/defaultFetch"
 
 export const refreshAccessToken = async () : Promise<AuthResult> => {
     try {
@@ -21,6 +21,8 @@ export const refreshAccessToken = async () : Promise<AuthResult> => {
             name: res.userProfile.nickname,
             profileImage: res.userProfile.profileImage
         }))
+
+        console.log(res)
         return res
     }
     catch (err) {

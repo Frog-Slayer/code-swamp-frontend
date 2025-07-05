@@ -1,6 +1,6 @@
 'use client'
 
-import ArticleEditPage from "@/features/article/screens/ArticleEditPage"
+import ArticleEditPage from "@/features/workspace/screens/ArticleEditPage"
 
 const ArticleWritePage = () => {
   return ( 

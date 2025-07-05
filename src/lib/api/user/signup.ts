@@ -1,4 +1,4 @@
-import { defaultFetch } from "@/lib/fetch/defaultFetch"
+import { defaultFetch } from "@/lib/api/fetch/defaultFetch"
 
 export interface SignupRequest {
     token: string
@@ -8,8 +8,12 @@ export interface SignupRequest {
     profileImageUrl: string
 }
 
-export const signUp = async (payload: SignupRequest) : Promise<void> => {
-    const res = await defaultFetch<void>('/users/signup', {
+interface SignupResponse {
+    otp: string
+}
+
+export const signUp = async (payload: SignupRequest) : Promise<SignupResponse> => {
+    const res = await defaultFetch<SignupResponse>('/users/signup', {
         method: 'POST',
         body: payload 
     })

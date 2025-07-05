@@ -19,7 +19,7 @@ export default function SignUp() {
     try {
       if (!signupToken) throw new Error('Signup token is required')
 
-      await signUp({
+      const res = await signUp({
         token: data.token,
         email: data.email,
         username: data.username,
@@ -28,7 +28,7 @@ export default function SignUp() {
       })
 
       const authResult = await temporaryLogin({
-        token: data.token,
+        token: res.otp,
         email: data.email
       })
       

@@ -2,9 +2,7 @@
 
 import SearchBar from "../../ui/SearchBar/SearchBar"
 import styles from "./Header.module.css"
-import NewPostButton from "./NewPostButton"
 import Notification from "./Notification"
-import LoginButton from "@/features/auth/components/LoginButton"
 import LoginModal from "@/features/auth/components/LoginModal"
 import { LoginSuccessPayload, NewUserPayload } from "@/features/auth/types/authEvents"
 

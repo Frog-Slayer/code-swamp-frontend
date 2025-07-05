@@ -1,4 +1,4 @@
-import { privateFetch } from "@/lib/fetch/privateFetch"
+import { privateFetch } from "@/lib/api/fetch/privateFetch"
 
 interface RenameFolderRequest{
     folderId: string
@@ -16,7 +16,7 @@ export const renameFolder = async (payload : RenameFolderRequest)
 
     try {
         const res = await privateFetch<RenameFolderResponse>(
-            `/folders/${folderId}/rename`, 
+            `/article-command/folders/${folderId}/rename`, 
             {
                 method: 'PATCH', 
                 body: { newName }
