@@ -6,6 +6,7 @@ import { createPublish, updatePublish } from "@/lib/api/article/publish"
 import { PublishModalProps } from "../components/PublishModal"
 import { Editor } from "@tiptap/react"
 import { ArticleState, ArticleAction } from "./types"
+import { useRouter } from "next/navigation"
 
 type Props = {
   editor: Editor | null
@@ -15,6 +16,7 @@ type Props = {
 
 export const useArticleActions = ({ editor, state, dispatch }: Props) => {
   const [isPublishModalOpen, setPublishModalOpen] = useState(false)
+  const router = useRouter()
 
   const setTitle = useCallback((title: string) => {
     dispatch({ type: 'SET_TITLE', title: title})
@@ -65,8 +67,17 @@ export const useArticleActions = ({ editor, state, dispatch }: Props) => {
       folderId: state.folderId,
     }
 
-    if (state.articleId && state.versionId) await updatePublish({ ...data, versionId: state.versionId }, state.articleId)
-    else await createPublish(data)
+    const result = state.articleId && state.versionId 
+    ? await updatePublish({ ...data, versionId: state.versionId }, state.articleId)
+    : await createPublish(data)
+
+    const query = { 
+      articleId : result.articleId,
+      versionId : result.versionId
+    }
+
+    const queryString = new URLSearchParams(query).toString()
+    router.push(`/post/publishing?${queryString}`)
 
   }, [editor, state])
 

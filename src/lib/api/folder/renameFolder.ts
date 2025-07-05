@@ -16,7 +16,7 @@ export const renameFolder = async (payload : RenameFolderRequest)
 
     try {
         const res = await privateFetch<RenameFolderResponse>(
-            `/folders/${folderId}/rename`, 
+            `/article-command/folders/${folderId}/rename`, 
             {
                 method: 'PATCH', 
                 body: { newName }

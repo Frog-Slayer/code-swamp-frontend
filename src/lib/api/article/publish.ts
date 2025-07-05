@@ -22,7 +22,7 @@ interface PublishResult{
 export const createPublish = async (payload : PublishRequest) : Promise<PublishResult>  => {
     try {
         const res = await privateFetch<PublishResult>(
-            "/articles/publish", 
+            "/article-command/articles/publish", 
             {
                 method: 'POST', 
                 body: payload,
@@ -39,7 +39,7 @@ export const createPublish = async (payload : PublishRequest) : Promise<PublishR
 export const updatePublish = async (payload : PublishUpdateRequest, articleId: string) : Promise<PublishResult>  => {
     try {
         const res = await privateFetch<PublishResult>(
-            `/articles/${articleId}/publish`, 
+            `/article-command/articles/${articleId}/publish`, 
             {
                 method: 'POST', 
                 body: payload,

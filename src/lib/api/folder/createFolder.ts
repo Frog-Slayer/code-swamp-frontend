@@ -14,8 +14,9 @@ interface CreateFolderResponse {
 export const createFolder = async (payload : CreateFolderRequest) 
 : Promise<CreateFolderResponse>  => {
     try {
+        console.log(`parentId: ${payload.parentId}`)
         const res = await privateFetch<CreateFolderResponse>(
-            '/folders', 
+            '/article-command/folders', 
             {
                 method: 'POST', 
                 body: payload

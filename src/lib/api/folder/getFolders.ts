@@ -19,7 +19,7 @@ export const getUserFolders = async (payload : GetUserFoldersRequest)
 : Promise<GetUserFoldersResponse>  => {
     try {
         const res = await defaultFetch<GetUserFoldersResponse>(
-            `/folders/${payload.userId}`, 
+            `/article-query/folders/${payload.userId}`, 
             {
                 method: 'GET', 
             })
@@ -35,7 +35,7 @@ export const getUserFolders = async (payload : GetUserFoldersRequest)
 export const getMyFolders = async () : Promise<GetUserFoldersResponse>  => {
     try {
         const res = await privateFetch<GetUserFoldersResponse>(
-            '/folders', 
+            '/article-query/folders', 
             {
                 method: 'GET', 
             })

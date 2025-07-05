@@ -28,6 +28,7 @@ export const privateFetch = async <T = any>(
 
     try {
         const authHeaders = new Headers(options.headers)
+        console.log(accessToken)
         authHeaders.set('Authorization', `Bearer ${accessToken}`)
 
         return await defaultFetch<T>(uri, {...options, headers: authHeaders, credentials: 'include'})

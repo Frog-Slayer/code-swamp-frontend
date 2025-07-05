@@ -3,7 +3,7 @@ import { privateFetch } from "@/lib/api/fetch/privateFetch"
 export const readVersionedArticle = async (articleId: string, versionId: string) : Promise<ReadArticleResult>  => {
     try {
         const res = await privateFetch<ReadArticleResult>(
-            `/articles/${articleId}/versions/${versionId}`, 
+            `/article-command/articles/${articleId}/versions/${versionId}`, 
             {
                 method: 'GET', 
             })

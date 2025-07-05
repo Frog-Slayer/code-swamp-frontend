@@ -1,0 +1,15 @@
+export interface ArticleListItem{
+    id: string,
+    authorId: string,
+    authorName: string,
+    authorNickname: string,
+    authorProfileImage: string,
+    folderPath: string,
+    createdAt: string,
+    updatedAt: string,
+    summary: string,
+    thumbnailUrl: string | null,
+    isPublic: boolean,
+    slug: string,
+    title: string,
+}

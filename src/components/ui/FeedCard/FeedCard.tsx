@@ -2,6 +2,7 @@ import { Eye, Heart } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "../badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../card";
+import { useRouter } from "next/navigation";
 
 export interface FeedCardProps{
   fullPath: string
@@ -19,9 +20,17 @@ export interface FeedCardProps{
   authorAvatar: string
 }
 
+
 const FeedCard = ({ post } : { post: FeedCardProps}) => {
+  const router = useRouter()
+
+  const handleClick = () => { 
+    router.push(post.fullPath)
+  }
+
+
     return (
-        <Link key={post.fullPath} href={`/${post.fullPath}`}>
+        <div key={post.fullPath} onClick={handleClick} className = "cursor-pointer">
           <Card key={post.fullPath} className="group hover-lift glass-card overflow-hidden">
             <div className="aspect-video bg-gradient-to-br from-primary/10 to-primary/5 relative overflow-hidden">
               <img
@@ -76,7 +85,7 @@ const FeedCard = ({ post } : { post: FeedCardProps}) => {
             </div>
         </CardContent>
       </Card>
-    </Link>
+    </div>
   );
 };
 

@@ -14,7 +14,7 @@ export interface DraftResult {
 export const createDraft = async (payload : DraftRequest) : Promise<DraftResult>  => {
     try {
         const res = await privateFetch<DraftResult>(
-            "/articles/draft", 
+            "/article-command/articles/draft", 
             {
                 method: 'POST', 
                 body: payload,
@@ -30,7 +30,7 @@ export const createDraft = async (payload : DraftRequest) : Promise<DraftResult>
 export const updateDraft = async (payload : DraftRequest, articleId: string, versionId: string) : Promise<DraftResult>  => {
     try {
         const res = await privateFetch<DraftResult>(
-            `/articles/${articleId}/versions/${versionId}/draft`, 
+            `/article-command/articles/${articleId}/versions/${versionId}/draft`, 
             {
                 method: 'PATCH', 
                 body: payload
